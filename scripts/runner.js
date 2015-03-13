@@ -7,7 +7,8 @@
         currentTime = 0,
         timeChangeCallbacks = [],
         missionEndCallbacks = [],
-        missionEnded = false;
+        missionEnded = false,
+        knownUnits = {};
 
     function changesUrl(missionname, from, to) {
         return dataUrl + '/mission/' + missionname + '/changes?from=' + from + '&to=' + to;
@@ -34,7 +35,22 @@
 
         $.get(url, function (data) {
 
-            map.updateMap(data);
+            _.each(data, function (newData, name) {
+                var data = knownUnits[name] || newData;
+                if (newData.position) {
+                    data.position = newData.position;
+                }
+                if (newData.side) {
+                    data.side = newData.side;
+                }
+                if (newData.status) {
+                    data.status = newData.status;
+                }
+
+                knownUnits[name] = data;
+            });
+
+            map.updateMap(knownUnits);
             timeChangeCallbacks.forEach(function (cb) {
                 cb(currentTime);
             });
