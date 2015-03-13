@@ -62,10 +62,11 @@
     loop();
 
     function restart() {
-        map.clearMap();
         if (!currentMission) {
             throw new Error('no mission selected');
         }
+        map.clearMap();
+        knownUnits = {};
         currentTime = currentMission.starttime;
         missionEnded = false;
 
