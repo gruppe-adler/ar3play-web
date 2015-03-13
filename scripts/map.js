@@ -47,16 +47,15 @@
     function init() {
         map = new google.maps.Map(document.querySelector('#map'), {
             zoom: 7,
-            center: new google.maps.LatLng(0, 0),
+            center: gameCoordsToLatLng(5000, 5000),
             mapTypeControlOptions: {
                 mapTypeIds: [google.maps.MapTypeId.ROADMAP, 'armaMapType']
             }
         });
         map.mapTypes.set('map', armaMapType);
         map.setMapTypeId('map');
-
     }
-    google.maps.event.addDomListener(window, 'load', init);
+
     /**
      * in-game coordinates are in meters, with 0,0 at south west corner of map
      * @param x
