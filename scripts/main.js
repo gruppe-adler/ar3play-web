@@ -8,7 +8,7 @@ $(function () {
     function getMission(name) {
         $.get(dataUrl + '/mission/' + name, function (data) {
             if (data) {
-                if (data.is_streamable) {
+                if (data.is_streamable || data.endtime) {
                     data.name = name;
                     runner.setMission(data);
                 } else {
