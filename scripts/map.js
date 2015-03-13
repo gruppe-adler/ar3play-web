@@ -73,6 +73,52 @@
         };
     }
 
+    var moveMarkerSmoothlyInOneSecond = (function () {
+        var
+            currentlyMovingMarkers = [],
+            currentlyMovingMarkerTargets = [];
+        return function (marker, targetPos) {
+
+            var existingIndex = currentlyMovingMarkers.indexOf(marker);
+            if (existingIndex !== -1) {
+                clearInterval(existingIndex);
+                marker.setPosition(currentlyMovingMarkerTargets[existingIndex]);
+                delete currentlyMovingMarkers[existingIndex];
+                delete currentlyMovingMarkerTargets[existingIndex];
+            }
+
+            var
+                targetTime = 1000,
+                steps = 10,
+                oldPos = marker.getPosition(),
+                oldLat = oldPos.lat(),
+                oldLng = oldPos.lng(),
+                latDiff = (targetPos.lat() - oldLat) / steps,
+                lngDiff = (targetPos.lng() - oldLng) / steps,
+                cnt = 0,
+                intervalId;
+
+            intervalId = setInterval(function () {
+                if (!currentlyMovingMarkers[intervalId]) {
+                    return;
+                }
+                if (cnt >= steps) {
+                    clearInterval(intervalId);
+                    marker.setPosition(targetPos);
+                    return;
+                }
+                cnt += 1;
+
+                marker.setPosition(new google.maps.LatLng(oldLat + cnt * latDiff, oldLng + cnt * lngDiff));
+
+            }, targetTime / steps);
+
+            currentlyMovingMarkers[intervalId] = marker;
+            currentlyMovingMarkerTargets[intervalId] = targetPos;
+        };
+    }());
+
+
     function updateMap(data) {
         _.each(data, function (val, name) {
             var m = markers[name] || new google.maps.Marker({
@@ -80,7 +126,10 @@
                     map: map,
                     title: name
                 });
-            m.setPosition(gameCoordsToLatLng(val.position.x, val.position.y));
+
+            moveMarkerSmoothlyInOneSecond(m, gameCoordsToLatLng(val.position.x, val.position.y));
+            //m.setPosition(gameCoordsToLatLng(val.position.x, val.position.y));
+
             m.setIcon('images/player-' + (val.side || 'unknown') + '.png');
             m.infowindow = m.infowindow || new google.maps.InfoWindow({
                 content: '?'

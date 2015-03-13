@@ -3,6 +3,8 @@ var dataUrl = 'http://' + (document.location.host || 'localhost') + ':12302';
 
 $(function () {
 
+    var $time = $('#time');
+
     function getMission(name) {
         $.get(dataUrl + '/mission/' + name, function (data) {
             if (data) {
@@ -62,14 +64,14 @@ $(function () {
     runner.onTimechange(function (time) {
         var date = new Date(time * 1000);
 
-        $('#time').text(date.toISOString());
+        $time.text(date.toISOString());
     });
 
     runner.onMissionEnd(function () {
         runner.setSpeed(0);
         $('#play-multiplicator').text(0);
         $('#mission-play-speed')[0].value = 0;
-        $('#time').text(('#time').text() + ' ENDE');
+        $time.text($time.text() + ' ENDE');
     });
 
 });
