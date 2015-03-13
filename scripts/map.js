@@ -27,10 +27,13 @@
             var tileZoom = zoom - initialZoom;
             x = x - numTiles;
             y = y - numTiles;
-            if (isOutOfBounds(x, y, numTiles)) {
+
+            var myY = Math.pow(2, tileZoom) - (y + 1);
+
+            if (isOutOfBounds(x, myY, numTiles)) {
                 return null;
             }
-            var myY = Math.pow(2, tileZoom) - (y + 1);
+
             var baseURL = 'maptiles/stratis_18022/';
             baseURL += [tileZoom, x, myY].join('/') + '.png';
             return baseURL;
