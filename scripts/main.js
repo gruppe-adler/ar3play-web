@@ -3,7 +3,12 @@ var dataUrl = 'http://' + (document.location.host || 'localhost') + ':12302';
 
 $(function () {
 
-    var $time = $('#time');
+    var
+        $time = $('#time'),
+        log = function (message) {
+            $('#messages').html(message).fadeTo(1000, 0.1);
+        },
+        currentServerMission = '';
 
     function getMission(name) {
         $.get(dataUrl + '/mission/' + name, function (data) {
@@ -11,11 +16,12 @@ $(function () {
                 if (data.is_streamable || data.endtime) {
                     data.name = name;
                     runner.setMission(data);
+                    $('#playing-mission-starttime').text(timestampToIsodate(data.starttime));
                 } else {
-                    $('#messages').html(name + ' nicht streambar');
+                    log(name + ' nicht streambar');
                 }
             } else {
-                $('#messages').html(name + ' nicht gefunden');
+                log(name + ' nicht gefunden');
             }
         });
     }
@@ -32,19 +38,35 @@ $(function () {
     }()));
 
     $.get(dataUrl + '/currentMission', function (currentMission) {
-        if (data && data.is_streamable) {
-            runner.setMission(currentMission);
-            runner.setSpeed(1);
-        } else {
-            console.log('huh, current mission not available or not streamable');
-        }
+        currentServerMission = currentMission;
+
+        $.get(dataUrl + '/missions', function (missions) {
+            $('#mission-select').html('<option value="">---</option>\n' + missions.map(function (mission) {
+                var bits = parseMissionInstanceName(mission);
+
+                return '<option value="' + mission + '" >' +
+                    timestampToIsodate(bits.starttime) + ' : ' + bits.name +
+                    (currentServerMission === mission ? ' LÄUFT' : '') +
+                    '</option>';
+            }).join('\n'))
+        });
+
     });
 
-    $.get(dataUrl + '/missions', function (missions) {
-        $('#mission-select').html(missions.map(function (mission) {
-            return '<option value="' + mission + '" >' + mission + '</option>';
-        }).join('\n'))
-    });
+
+    function parseMissionInstanceName(missionInstanceName) {
+        var bits = missionInstanceName.split('-');
+
+        return {
+            starttime: parseInt(bits[0], 10),
+            name: bits.slice(1).join('-')
+        }
+    }
+
+    function timestampToIsodate(ts) {
+        return (new Date(ts * 1000)).toISOString();
+    }
+
 
     $('#mission-select').change(function () {
         getMission(this.value);
