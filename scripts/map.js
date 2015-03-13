@@ -129,7 +129,9 @@
                     title: name
                 });
 
-            moveMarkerSmoothlyInOneSecond(m, gameCoordsToLatLng(val.position.x, val.position.y));
+            if (val.position) {
+                moveMarkerSmoothlyInOneSecond(m, gameCoordsToLatLng(val.position.x, val.position.y));
+            }
             //m.setPosition(gameCoordsToLatLng(val.position.x, val.position.y));
 
             m.setIcon('images/player-' + (val.side || 'unknown') + '.png');
