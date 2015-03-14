@@ -69,10 +69,9 @@ $(function () {
 
         $.get(dataUrl + '/missions', function (missions) {
             $('#mission-select').html('<option value="">---</option>\n' + missions.map(function (mission) {
-                var bits = parseMissionInstanceName(mission);
-
-                return '<option value="' + mission + '" >' +
-                    timeFormat(bits.starttime) + ' : ' + bits.name +
+                return '<option value="' + mission.instanceId + '" ' + (mission.worldname.toLowerCase() !== world ? 'disabled' : '')  + '>' +
+                    timeFormat(mission.starttime) + ' : ' + mission.name +
+                        ' (' + mission.worldname + ')' +
                     (currentServerMission === mission ? ' LÄUFT' : '') +
                     '</option>';
             }).join('\n'))
