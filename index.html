@@ -9,6 +9,9 @@
     <script type="text/javascript"
             src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.2/underscore-min.js"></script>
     <style>
+        #select-date-format {
+            float: right;
+        }
         #map {
             clear: both;
             min-height: 400px;
@@ -38,8 +41,14 @@
 </head>
 <body>
 <div id="messages"></div>
-
+<label id="select-date-format">Datumsformat
+    <select>
+        <option value="iso8601">ISO8601</option>
+        <option value="locale">lokal</option>
+    </select>
+</label>
 <section id="mission-change-controls">
+
     <label>
         choose mission
         <select id="mission-select">

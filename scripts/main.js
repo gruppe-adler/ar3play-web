@@ -4,11 +4,24 @@ var dataUrl = 'http://' + (document.location.host || 'localhost') + ':12302';
 $(function () {
 
     var
+        dateFormatFunctions = {
+            iso8601: function (date) {
+                return date.toISOString();
+            },
+            locale: function (date) {
+                return date.toLocaleString();
+            }
+        },
+        dateFormat = localStorage.getItem('date-format') || 'iso8601',
         $time = $('#time'),
         log = function (message) {
             $('#messages').html(message).fadeTo(1000, 0.1);
         },
         currentServerMission = '';
+
+    function timeFormat(ts) {
+        return dateFormatFunctions[dateFormat](new Date(ts * 1000));
+    }
 
     function getMission(name) {
         $.get(dataUrl + '/mission/' + name, function (data) {
@@ -16,7 +29,7 @@ $(function () {
                 if (data.is_streamable || data.endtime) {
                     data.name = name;
                     runner.setMission(data);
-                    $('#playing-mission-starttime').text(timestampToIsodate(data.starttime));
+                    $('#playing-mission-starttime').text(timeFormat(data.starttime));
                 } else {
                     log(name + ' nicht streambar');
                 }
@@ -45,7 +58,7 @@ $(function () {
                 var bits = parseMissionInstanceName(mission);
 
                 return '<option value="' + mission + '" >' +
-                    timestampToIsodate(bits.starttime) + ' : ' + bits.name +
+                    timeFormat(bits.starttime) + ' : ' + bits.name +
                     (currentServerMission === mission ? ' LÄUFT' : '') +
                     '</option>';
             }).join('\n'))
@@ -63,9 +76,7 @@ $(function () {
         }
     }
 
-    function timestampToIsodate(ts) {
-        return (new Date(ts * 1000)).toISOString();
-    }
+
 
 
     $('#mission-select').change(function () {
@@ -96,4 +107,8 @@ $(function () {
         $time.text($time.text() + ' ENDE');
     });
 
+    $('#select-date-format select').change(function () {
+        localStorage.setItem('date-format', this.value);
+        dateFormat = this.value;
+    });
 });
