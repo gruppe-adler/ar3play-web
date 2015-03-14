@@ -1,3 +1,24 @@
+var worlds = {
+    stratis: {
+        tileDir: 'stratis_18022',
+        initialZoom: 7,
+        maxZoom: 14,
+        center: [5000, 5000],
+        metersToCoord: function (x, y) {
+            return new google.maps.LatLng(y * 0.00018861 - 2.8114, x * 0.00018882);
+        },
+        coordToMeters: function (latLng) {
+            return {
+                x: latLng.lat() / 0.00018882,
+                y: latLng.lng() + 2.8114 / 0.00018861,
+                z: 0
+            };
+        }
+    },
+
+    altis: {}
+};
+
 /*global google, $, _ */
 /*
 * Ursprung: (links unten): {lat: -2.8115, lng: -0}
@@ -10,6 +31,11 @@
     var tileSize = 256;
     var map;
     var markers = {};
+    var currentWorld = 'stratis';
+
+    function getWorld() {
+        return worlds[currentWorld];
+    }
 
     function isOutOfBounds(x, y, numTiles) {
         if (y < 0 || y >= numTiles) {
@@ -24,7 +50,7 @@
             var x = coord.x;
             var y = coord.y;
             var numTiles = Math.pow(2, zoom - 1);
-            var tileZoom = zoom - initialZoom;
+            var tileZoom = zoom - getWorld().initialZoom;
             x = x - numTiles;
             y = y - numTiles;
 
@@ -40,14 +66,14 @@
         },
         tileSize: new google.maps.Size(tileSize, tileSize),
         isPng: true,
-        minZoom: initialZoom + 2,
-        maxZoom: initialZoom + 7,
+        minZoom: getWorld().initialZoom + 2,
+        maxZoom: getWorld().maxZoom,
         name: 'Stratis T10'
     });
     function init() {
         map = new google.maps.Map(document.querySelector('#map'), {
-            zoom: 7,
-            center: gameCoordsToLatLng(5000, 5000),
+            zoom: getWorld().initialZoom,
+            center: gameCoordsToLatLng(getWorld().center[0], getWorld().center[1]),
             mapTypeControlOptions: {
                 mapTypeIds: [google.maps.MapTypeId.ROADMAP, 'armaMapType']
             }
@@ -65,14 +91,10 @@
      *
      */
     function gameCoordsToLatLng(x, y) {
-        return new google.maps.LatLng(y * 0.000189 + +-2.8115, x * 0.000188);
+        return getWorld().metersToCoord(x, y);
     }
     function latLngToGameCoords(latLng) {
-        return {
-            x: latLng.lat() / 0.000188,
-            y: latLng.lng() + 2.8115 / 0.000189,
-            z: 0
-        };
+        return getWorld().coordToMeters(latLng);
     }
 
     var moveMarkerSmoothlyInOneSecond = (function () {
@@ -160,7 +182,14 @@
         init: init,
         updateMap: updateMap,
         clearMap: clearMap,
+        setWorldname: function (worldName) {
+            currentWorld = worldName;
+        },
         showMarkers: function () {markerAction('open'); },
-        hideMarkers: function () {markerAction('close'); }
+        hideMarkers: function () {markerAction('close'); },
+        _getMap: function () {
+            return map;
+        }
+
     };
 }());

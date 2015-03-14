@@ -76,9 +76,6 @@ $(function () {
         }
     }
 
-
-
-
     $('#mission-select').change(function () {
         getMission(this.value);
     });
@@ -107,7 +104,7 @@ $(function () {
         $time.text($time.text() + ' ENDE');
     });
 
-    $('#select-date-format select').change(function () {
+    $('#select-date-format').find('select').change(function () {
         localStorage.setItem('date-format', this.value);
         dateFormat = this.value;
     })[0].value = dateFormat;
