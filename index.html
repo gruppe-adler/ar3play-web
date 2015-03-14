@@ -12,19 +12,15 @@
         #select-date-format {
             float: right;
         }
-        #maps {
+        #map {
             clear: both;
             position: relative;
             min-height: 400px;
             min-width: 400px;
             background-color: pink;
         }
-        .map {
-            height: 100%;
-            width: 100%;
-        }
 
-        html, body, #maps {
+        html, body, #map {
             height: 100%;
         }
 
@@ -40,6 +36,7 @@
             float: right;
         }
     </style>
+    <script src="scripts/worlds.js"></script>
     <script src="scripts/main.js"></script>
     <script src="scripts/runner.js"></script>
     <script src="scripts/map.js"></script>
@@ -53,7 +50,12 @@
     </select>
 </label>
 <section id="mission-change-controls">
+    <label>
+        choose world
+        <select id="world-select">
 
+        </select>
+    </label>
     <label>
         choose mission
         <select id="mission-select">
@@ -87,8 +89,8 @@
     </div>
 
 </section>
-<section id="maps">
-    <div class="map">dummymap</div>
+<section id="map">
+    :)
 </section>
 </body>
 </html>

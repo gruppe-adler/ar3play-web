@@ -1,39 +1,3 @@
-var worlds = {
-    stratis: {
-        tileDir: 'stratis_18022',
-        initialZoom: 7,
-        maxZoom: 14,
-        center: [5000, 5000],
-        metersToCoord: function (x, y) {
-            return new google.maps.LatLng(y * 0.00018861 - 2.8114, x * 0.00018882);
-        },
-        coordToMeters: function (latLng) {
-            return {
-                x: latLng.lat() / 0.00018882,
-                y: latLng.lng() + 2.8114 / 0.00018861,
-                z: 0
-            };
-        }
-    },
-
-    altis: {
-        tileDir: 'AltisZL5',
-        initialZoom: 7,
-        maxZoom: 12,
-        center: [10000, 10000],
-        metersToCoord: function (x, y) {
-            return new google.maps.LatLng(y * 0.00018861 - 2.8114, x * 0.0001828);
-        },
-        coordToMeters: function (latLng) {
-            return {
-                x: latLng.lat() / 0.0001828,
-                y: latLng.lng() + 2.8114 / 0.00018861,
-                z: 0
-            };
-        }
-
-    }
-};
 
 /*global google, $, _ */
 /*
@@ -43,16 +7,21 @@ var worlds = {
 */
 (function () {
 
-    var initialZoom = 7;
-    var tileSize = 256;
-    var currentMap;
-    var maps = {};
-    var markers = {};
-    var currentWorld = 'stratis';
+    var
+        tileSize = 256,
+        currentMap,
+        markers = {},
+        getWorld = (function () {
+            var currentWorld,
+                fn = function () {
+                return worlds[currentWorld];
+            };
+            fn.setWorld = function (world) {
+                currentWorld = world;
+            };
+            return fn;
+        }());
 
-    function getWorld() {
-        return worlds[currentWorld];
-    }
 
     function isOutOfBounds(x, y, numTiles) {
         if (y < 0 || y >= numTiles) {
@@ -62,53 +31,38 @@ var worlds = {
             return true;
         }
     }
-    var armaMapType = new google.maps.ImageMapType({
-        getTileUrl: function (coord, zoom) {
-            var x = coord.x;
-            var y = coord.y;
-            var numTiles = Math.pow(2, zoom - 1);
-            var tileZoom = zoom - getWorld().initialZoom;
-            x = x - numTiles;
-            y = y - numTiles;
 
-            var myY = Math.pow(2, tileZoom) - (y + 1);
+    function init(world) {
+        getWorld.setWorld(world);
 
-            if (isOutOfBounds(x, myY, numTiles)) {
-                return null;
-            }
+        var armaMapType = new google.maps.ImageMapType({
+            getTileUrl: function (coord, zoom) {
+                var x = coord.x;
+                var y = coord.y;
+                var numTiles = Math.pow(2, zoom - 1);
+                var tileZoom = zoom - getWorld().initialZoom;
+                x = x - numTiles;
+                y = y - numTiles;
 
-            var baseURL = 'maptiles/' + getWorld().tileDir + '/';
-            baseURL += [tileZoom, x, myY].join('/') + '.png';
-            return baseURL;
-        },
-        tileSize: new google.maps.Size(tileSize, tileSize),
-        isPng: true,
-        minZoom: getWorld().initialZoom + 2,
-        maxZoom: getWorld().maxZoom,
-        name: currentWorld
-    });
+                var myY = Math.pow(2, tileZoom) - (y + 1);
 
-    function getDivForWorld(worldname) {
-        var id = 'map-' + worldname,
-            div = document.querySelector('#' + id);
+                if (isOutOfBounds(x, myY, numTiles)) {
+                    return null;
+                }
 
-        if (!div) {
-            div = $('<div class="map" id="' + id + '"></div>')[0];
-            $('#maps').append(div);
-        }
-        $('.map').hide();
-        $(div).show();
+                var baseURL = 'maptiles/' + getWorld().tileDir + '/';
+                baseURL += [tileZoom, x, myY].join('/') + '.png';
+                return baseURL;
+            },
+            tileSize: new google.maps.Size(tileSize, tileSize),
+            isPng: true,
+            minZoom: getWorld().initialZoom + 2,
+            maxZoom: getWorld().maxZoom,
+            name: getWorld().name
+        });
 
-        return div;
-    }
 
-    function init() {
-        var container = getDivForWorld(currentWorld);
-        if (maps[currentWorld]) {
-            currentMap = maps[currentWorld];
-            return;
-        }
-        currentMap = new google.maps.Map(container, {
+        currentMap = new google.maps.Map($('#map')[0], {
             zoom: getWorld().initialZoom,
             center: gameCoordsToLatLng(getWorld().center[0], getWorld().center[1]),
             mapTypeControlOptions: {
@@ -117,7 +71,6 @@ var worlds = {
         });
         currentMap.mapTypes.set('map', armaMapType);
         currentMap.setMapTypeId('map');
-        maps[currentWorld] = map;
     }
 
     /**
@@ -219,11 +172,6 @@ var worlds = {
         init: init,
         updateMap: updateMap,
         clearMap: clearMap,
-        setWorldname: function (worldName) {
-            currentWorld = worldName;
-            clearMap();
-            init();
-        },
         showMarkers: function () {markerAction('open'); },
         hideMarkers: function () {markerAction('close'); },
         _getMap: function () {

@@ -1,9 +1,23 @@
 var dataUrl = 'http://' + (document.location.host || 'localhost') + ':12302';
 
+function getQuery() {
+    var query = {};
+    document.location.search.substr(1).split('&').forEach(function (part) {
+        var bits = part.split('=');
+        var name = decodeURIComponent(bits[0]), value;
+        if (bits[1]) {
+            value = decodeURIComponent(bits[1]);
+        }
+        query[name] = value;
+    });
+    return query;
+}
+
 
 $(function () {
 
     var
+        world = getQuery().world || 'stratis',
         dateFormatFunctions = {
             iso8601: function (date) {
                 return date.toISOString();
@@ -39,7 +53,7 @@ $(function () {
         });
     }
 
-    map.init();
+    map.init(world);
 
 
     $('#toggle-names').click((function () {
@@ -108,4 +122,10 @@ $(function () {
         localStorage.setItem('date-format', this.value);
         dateFormat = this.value;
     })[0].value = dateFormat;
+
+    $('#world-select').html(_.map(worlds, function (world, key) {
+        return '<option value="' + key + '">' + world.name + '</option>';
+    }).join('\n')).change(function () {
+        document.location.href = document.location.href.split('?')[0] + '?world=' + this.value;
+    })[0].value = world;
 });
