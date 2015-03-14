@@ -24,7 +24,7 @@ var worlds = {
         maxZoom: 12,
         center: [15000, 15000],
         metersToCoord: function (x, y) {
-            return new google.maps.LatLng(y * 0.00018870 - 2.8114, x * 0.00018861);
+            return new google.maps.LatLng(y * 0.00018870 - 3.2900, x * 0.0001888 - 0.0059);
         },
         coordToMeters: function (latLng) {
             return {
