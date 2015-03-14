@@ -52,5 +52,23 @@ var worlds = {
             };
         },
         name: 'Chernarus'
+    },
+
+    takistan: {
+        tileDir: 'Takistan_28384',
+        initialZoom: 7,
+        maxZoom: 12,
+        center: [10000, 10000],
+        metersToCoord: function (x, y) {
+            return new google.maps.LatLng(y * 0.00018980 - 2.8114, x * 0.0001903);
+        },
+        coordToMeters: function (latLng) {
+            return {
+                x: latLng.lat() / 0.0001903,
+                y: latLng.lng() + 2.8114 / 0.00018980,
+                z: 0
+            };
+        },
+        name: 'Takistan'
     }
 };
