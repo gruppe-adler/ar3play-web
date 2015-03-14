@@ -37,18 +37,18 @@ $(function () {
         return dateFormatFunctions[dateFormat](new Date(ts * 1000));
     }
 
-    function getMission(name) {
-        $.get(dataUrl + '/mission/' + name, function (data) {
+    function getMission(instanceId) {
+        $.get(dataUrl + '/mission/' + encodeURIComponent(instanceId), function (data) {
             if (data) {
                 if (data.is_streamable || data.endtime) {
-                    data.name = name;
+                    data.name = instanceId;
                     runner.setMission(data);
                     $('#playing-mission-starttime').text(timeFormat(data.starttime));
                 } else {
-                    log(name + ' nicht streambar');
+                    log(instanceId + ' nicht streambar');
                 }
             } else {
-                log(name + ' nicht gefunden');
+                log(instanceId + ' nicht gefunden');
             }
         });
     }
@@ -78,16 +78,6 @@ $(function () {
         });
 
     });
-
-
-    function parseMissionInstanceName(missionInstanceName) {
-        var bits = missionInstanceName.split('-');
-
-        return {
-            starttime: parseInt(bits[0], 10),
-            name: bits.slice(1).join('-')
-        }
-    }
 
     $('#mission-select').change(function () {
         getMission(this.value);
