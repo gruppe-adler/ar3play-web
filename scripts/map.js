@@ -56,7 +56,7 @@
             },
             tileSize: new google.maps.Size(tileSize, tileSize),
             isPng: true,
-            minZoom: getWorld().initialZoom + 2,
+            minZoom: getWorld().initialZoom,
             maxZoom: getWorld().maxZoom,
             name: getWorld().name
         });
@@ -67,7 +67,8 @@
             center: gameCoordsToLatLng(getWorld().center[0], getWorld().center[1]),
             mapTypeControlOptions: {
                 mapTypeIds: ['armaMapType']
-            }
+            },
+            streetViewControl: false
         });
         currentMap.mapTypes.set('map', armaMapType);
         currentMap.setMapTypeId('map');
