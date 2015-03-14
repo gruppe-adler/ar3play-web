@@ -16,7 +16,23 @@ var worlds = {
         }
     },
 
-    altis: {}
+    altis: {
+        tileDir: 'AltisZL5',
+        initialZoom: 7,
+        maxZoom: 12,
+        center: [10000, 10000],
+        metersToCoord: function (x, y) {
+            return new google.maps.LatLng(y * 0.00018861 - 2.8114, x * 0.0001828);
+        },
+        coordToMeters: function (latLng) {
+            return {
+                x: latLng.lat() / 0.0001828,
+                y: latLng.lng() + 2.8114 / 0.00018861,
+                z: 0
+            };
+        }
+
+    }
 };
 
 /*global google, $, _ */
@@ -29,7 +45,8 @@ var worlds = {
 
     var initialZoom = 7;
     var tileSize = 256;
-    var map;
+    var currentMap;
+    var maps = {};
     var markers = {};
     var currentWorld = 'stratis';
 
@@ -60,7 +77,7 @@ var worlds = {
                 return null;
             }
 
-            var baseURL = 'maptiles/stratis_18022/';
+            var baseURL = 'maptiles/' + getWorld().tileDir + '/';
             baseURL += [tileZoom, x, myY].join('/') + '.png';
             return baseURL;
         },
@@ -68,18 +85,39 @@ var worlds = {
         isPng: true,
         minZoom: getWorld().initialZoom + 2,
         maxZoom: getWorld().maxZoom,
-        name: 'Stratis T10'
+        name: currentWorld
     });
+
+    function getDivForWorld(worldname) {
+        var id = 'map-' + worldname,
+            div = document.querySelector('#' + id);
+
+        if (!div) {
+            div = $('<div class="map" id="' + id + '"></div>')[0];
+            $('#maps').append(div);
+        }
+        $('.map').hide();
+        $(div).show();
+
+        return div;
+    }
+
     function init() {
-        map = new google.maps.Map(document.querySelector('#map'), {
+        var container = getDivForWorld(currentWorld);
+        if (maps[currentWorld]) {
+            currentMap = maps[currentWorld];
+            return;
+        }
+        currentMap = new google.maps.Map(container, {
             zoom: getWorld().initialZoom,
             center: gameCoordsToLatLng(getWorld().center[0], getWorld().center[1]),
             mapTypeControlOptions: {
                 mapTypeIds: ['armaMapType']
             }
         });
-        map.mapTypes.set('map', armaMapType);
-        map.setMapTypeId('map');
+        currentMap.mapTypes.set('map', armaMapType);
+        currentMap.setMapTypeId('map');
+        maps[currentWorld] = map;
     }
 
     /**
@@ -147,7 +185,7 @@ var worlds = {
         _.each(data, function (val, name) {
             var m = markers[name] || new google.maps.Marker({
                     position: { lat: 0, lng: 0 },
-                    map: map,
+                    map: currentMap,
                     title: name
                 });
 
@@ -167,7 +205,7 @@ var worlds = {
 
     function markerAction(methodName) {
         _.each(markers, function (m) {
-            m.infowindow[methodName](map, m);
+            m.infowindow[methodName](currentMap, m);
         });
     }
 
@@ -177,18 +215,19 @@ var worlds = {
             delete markers[idx];
         });
     }
-
     window.map = {
         init: init,
         updateMap: updateMap,
         clearMap: clearMap,
         setWorldname: function (worldName) {
             currentWorld = worldName;
+            clearMap();
+            init();
         },
         showMarkers: function () {markerAction('open'); },
         hideMarkers: function () {markerAction('close'); },
         _getMap: function () {
-            return map;
+            return currentMap;
         }
 
     };

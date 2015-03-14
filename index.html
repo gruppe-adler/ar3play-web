@@ -12,14 +12,19 @@
         #select-date-format {
             float: right;
         }
-        #map {
+        #maps {
             clear: both;
+            position: relative;
             min-height: 400px;
             min-width: 400px;
             background-color: pink;
         }
+        .map {
+            height: 100%;
+            width: 100%;
+        }
 
-        html, body, #map {
+        html, body, #maps {
             height: 100%;
         }
 
@@ -82,10 +87,8 @@
     </div>
 
 </section>
-<section id="map">
-    <div id="nojs">
-        If you can see this message, there is a problem with JavaScript
-    </div>
+<section id="maps">
+    <div class="map">dummymap</div>
 </section>
 </body>
 </html>
