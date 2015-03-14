@@ -110,5 +110,5 @@ $(function () {
     $('#select-date-format select').change(function () {
         localStorage.setItem('date-format', this.value);
         dateFormat = this.value;
-    });
+    })[0].value = dateFormat;
 });
