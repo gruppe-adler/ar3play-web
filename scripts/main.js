@@ -75,7 +75,7 @@ $(function () {
     function sliderChange() {
         var sliderValue = this.value;
         var multiplicator = Math.min(100, Math.pow(sliderValue, 1.5));
-        $('#play-multiplicator').text(multiplicator);
+        $('#play-multiplicator').text(multiplicator.toFixed(1));
         runner.setSpeed(multiplicator);
     }
 

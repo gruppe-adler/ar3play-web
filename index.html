@@ -10,6 +10,7 @@
             src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.2/underscore-min.js"></script>
     <style>
         #map {
+            clear: both;
             min-height: 400px;
             min-width: 400px;
             background-color: pink;
@@ -26,13 +27,18 @@
         #play-multiplicator:after {
             content: ')'
         }
+
+        #mission-play-controls {
+            float: right;
+        }
     </style>
-    <script src="scripts/main.js" ></script>
-    <script src="scripts/runner.js" ></script>
-    <script src="scripts/map.js" ></script>
+    <script src="scripts/main.js"></script>
+    <script src="scripts/runner.js"></script>
+    <script src="scripts/map.js"></script>
 </head>
 <body>
 <div id="messages"></div>
+
 <section id="mission-change-controls">
     <label>
         choose mission
@@ -41,8 +47,15 @@
         </select>
     </label>
 </section>
+
+<h1 id="playing-mission-title">---</h1>
+
 <section>
     <div id="mission-play-controls">
+
+        <div id="map-controls">
+            <button id="toggle-names">toggle names</button>
+        </div>
         <button id="mission-restart">restart</button>
         <label>
             Geschwindigkeit
@@ -50,13 +63,16 @@
             <span id="play-multiplicator">1</span>
         </label>
     </div>
-    <div id="map-controls">
-        <button id="toggle-names">toggle names</button>
+    <div>
+        <div>
+            Startzeit: <span id="playing-mission-starttime"></span>
+        </div>
+        <div>
+            Aktuelle Zeit: <span id="time"></span>
+        </div>
     </div>
+
 </section>
-<h1 id="playing-mission-title"></h1>
-Startzeit: <span id="playing-mission-starttime"></span>
-Aktuelle Zeit: <div id="time"></div>
 <section id="map">
     <div id="nojs">
         If you can see this message, there is a problem with JavaScript
