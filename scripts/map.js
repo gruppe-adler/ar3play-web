@@ -75,7 +75,7 @@ var worlds = {
             zoom: getWorld().initialZoom,
             center: gameCoordsToLatLng(getWorld().center[0], getWorld().center[1]),
             mapTypeControlOptions: {
-                mapTypeIds: [google.maps.MapTypeId.ROADMAP, 'armaMapType']
+                mapTypeIds: ['armaMapType']
             }
         });
         map.mapTypes.set('map', armaMapType);
