@@ -18,6 +18,7 @@ $(function () {
 
     var
         world = getQuery().world || 'stratis',
+        missions = {},
         dateFormatFunctions = {
             iso8601: function (date) {
                 return date.toISOString();
@@ -38,19 +39,18 @@ $(function () {
     }
 
     function getMission(instanceId) {
-        $.get(dataUrl + '/mission/' + encodeURIComponent(instanceId), function (data) {
-            if (data) {
-                if (data.is_streamable || data.endtime) {
-                    data.name = instanceId;
-                    runner.setMission(data);
-                    $('#playing-mission-starttime').text(timeFormat(data.starttime));
-                } else {
-                    log(instanceId + ' nicht streambar');
-                }
+        var mission = missions[instanceId];
+        if (mission) {
+            if (mission.is_streamable || mission.endtime) {
+                runner.setMission(mission);
+                $('#playing-mission-starttime').text(timeFormat(mission.starttime));
+                $('#playing-mission-title').text(missions[instanceId].name);
             } else {
-                log(instanceId + ' nicht gefunden');
+                log(instanceId + ' nicht streambar');
             }
-        });
+        } else {
+            log(instanceId + ' nicht gefunden');
+        }
     }
 
     map.init(world);
@@ -67,8 +67,9 @@ $(function () {
     $.get(dataUrl + '/currentMission', function (currentMission) {
         currentServerMission = currentMission;
 
-        $.get(dataUrl + '/missions', function (missions) {
-            $('#mission-select').html('<option value="">---</option>\n' + missions.map(function (mission) {
+        $.get(dataUrl + '/missions', function (data) {
+            $('#mission-select').html('<option value="">---</option>\n' + data.map(function (mission) {
+                missions[mission.instanceId] = mission;
                 return '<option value="' + mission.instanceId + '" ' + (mission.worldname.toLowerCase() !== world ? 'disabled' : '')  + '>' +
                     timeFormat(mission.starttime) + ' : ' + mission.name +
                         ' (' + mission.worldname + ')' +

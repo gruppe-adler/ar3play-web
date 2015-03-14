@@ -29,7 +29,7 @@
         }
 
         var nextTime = currentTime + speed,
-            url = changesUrl(currentMission.name, parseInt(currentTime, 10), parseInt(nextTime, 10));
+            url = changesUrl(currentMission.instanceId, parseInt(currentTime, 10), parseInt(nextTime, 10));
 
         currentTime = nextTime;
 
