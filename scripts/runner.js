@@ -10,8 +10,8 @@
         missionEnded = false,
         knownUnits = {};
 
-    function changesUrl(missionname, from, to) {
-        return dataUrl + '/mission/' + missionname + '/changes?from=' + from + '&to=' + to;
+    function changesUrl(instanceId, from, to) {
+        return dataUrl + '/mission/' + encodeURIComponent(instanceId) + '/changes?from=' + from + '&to=' + to;
     }
 
     function loop() {
