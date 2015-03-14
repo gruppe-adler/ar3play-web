@@ -24,7 +24,7 @@ var worlds = {
         maxZoom: 12,
         center: [10000, 10000],
         metersToCoord: function (x, y) {
-            return new google.maps.LatLng(y * 0.00018861 - 2.8114, x * 0.0001828);
+            return new google.maps.LatLng(y * 0.00018870 - 2.8114, x * 0.00018861);
         },
         coordToMeters: function (latLng) {
             return {
@@ -34,5 +34,23 @@ var worlds = {
             };
         },
         name: 'Altis'
+    },
+
+    chernarus: {
+        tileDir: 'Chernarus_33792',
+        initialZoom: 7,
+        maxZoom: 12,
+        center: [10000, 10000],
+        metersToCoord: function (x, y) {
+            return new google.maps.LatLng(y * 0.00009435 - 2.8114, x * 0.00009432);
+        },
+        coordToMeters: function (latLng) {
+            return {
+                x: latLng.lat() / 0.00009432,
+                y: latLng.lng() + 2.8114 / 0.00009435,
+                z: 0
+            };
+        },
+        name: 'Chernarus'
     }
 };
