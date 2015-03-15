@@ -40,8 +40,8 @@
                 if (newData.position) {
                     data.position = newData.position;
                 }
-                if (newData.side) {
-                    data.side = newData.side;
+                if (newData.role) {
+                    data.role = newData.role;
                 }
                 if (newData.status) {
                     data.status = newData.status;

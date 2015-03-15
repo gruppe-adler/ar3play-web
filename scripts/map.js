@@ -145,16 +145,31 @@
 
             if (val.position) {
                 moveMarkerSmoothlyInOneSecond(m, gameCoordsToLatLng(val.position.x, val.position.y));
+                m.zIndex = 1000 + (val.position.z || 0);
             }
             //m.setPosition(gameCoordsToLatLng(val.position.x, val.position.y));
 
-            m.setIcon('images/player-' + (val.side || 'unknown') + '.png');
+            m.setIcon(getIcon(val));
             m.infowindow = m.infowindow || new google.maps.InfoWindow({
                 content: '?'
             });
             m.infowindow.content = '<div>' + name + '</div>';
             markers[name] = m;
         });
+
+
+    }
+
+    function getIcon(val) {
+        var
+            mapSide = {
+                'ind': 'independent',
+                'civ': 'civilian'
+            },
+            sidePrefix = mapSide[(val.role && val.role.side) || 'civ'] || val.role.side;
+
+        return 'images/' + sidePrefix + '_iconman_ca.png';
+
     }
 
     function markerAction(methodName) {
