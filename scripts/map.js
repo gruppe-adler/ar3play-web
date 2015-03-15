@@ -166,12 +166,14 @@
                 'ind': 'independent',
                 'civ': 'civilian'
             },
-            sidePrefix = mapSide[(val.role && val.role.side) || 'civ'] || val.role.side,
+            side,
+            sidePrefix,
             imageUrl;
 
+        side = (val.role && val.role.side) || 'civ';
+        sidePrefix = mapSide[side] || side;
+
         imageUrl = 'images/' + sidePrefix + '_iconman_ca.png';
-
-
 
         return {
             url: imageUrl,
