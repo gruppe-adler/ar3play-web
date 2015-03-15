@@ -166,9 +166,18 @@
                 'ind': 'independent',
                 'civ': 'civilian'
             },
-            sidePrefix = mapSide[(val.role && val.role.side) || 'civ'] || val.role.side;
+            sidePrefix = mapSide[(val.role && val.role.side) || 'civ'] || val.role.side,
+            imageUrl;
 
-        return 'images/' + sidePrefix + '_iconman_ca.png';
+        imageUrl = 'images/' + sidePrefix + '_iconman_ca.png';
+
+
+
+        return {
+            url: imageUrl,
+            scaledSize: new google.maps.Size(16, 16),
+            anchor: new google.maps.Point(8, 8)
+        };
 
     }
 
