@@ -1,6 +1,6 @@
 Arma3 mission replays.
 
-# Prerequites
+# Prerequisites
 
 * [`sock.dll` / `sock.so` Arma3 server extension](http://forums.bistudio.com/showthread.php?178327-Node-js-Extension-for-Arma-3-%28sock-sqf-sock-dll-sock-rpc%29)
 * [NodeJS](https://nodejs.org)/ (0.10 or so?)
@@ -15,6 +15,5 @@ Arma3 mission replays.
 # Installation of this thing here
 
 * clone
-* put [T10's Stratis map](http://forums.bistudio.com/showthread.php?178671-Tiled-maps-Google-maps-compatible-%28WIP%29) under maptiles/stratis_18022/ 
-
-configuration for other islands are still missing
+* put [T10's Stratis map](http://forums.bistudio.com/showthread.php?178671-Tiled-maps-Google-maps-compatible-%28WIP%29) and others under maptiles
+* configuration for islands is in worlds.js
