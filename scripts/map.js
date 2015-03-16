@@ -95,7 +95,7 @@
         return Math.sqrt(x * x + y * y);
     }
 
-    var moveMarkerSmoothlyInOneSecond = (function () {
+    var moveMarkerSmoothlyInTwoSeconds = (function () {
         var
             currentlyMovingMarkers = [],
             currentlyMovingMarkerTargets = [];
@@ -110,7 +110,7 @@
             }
 
             var
-                targetTime = 1000,
+                targetTime = 2000,
                 oldPos = marker.getPosition(),
                 oldLat = oldPos.lat(),
                 oldLng = oldPos.lng(),
@@ -164,7 +164,7 @@
                 });
 
             if (val.position) {
-                moveMarkerSmoothlyInOneSecond(m, gameCoordsToLatLng(val.position.x, val.position.y));
+                moveMarkerSmoothlyInTwoSeconds(m, gameCoordsToLatLng(val.position.x, val.position.y));
                 m.zIndex = 1000 + (val.position.z || 0);
                 //m.setPosition(gameCoordsToLatLng(val.position.x, val.position.y));
             }

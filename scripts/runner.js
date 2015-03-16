@@ -55,7 +55,7 @@
                 cb(currentTime);
             });
         }).always(function () {
-            setTimeout(loop, 1000);
+            setTimeout(loop, 2000);
         });
     }
 
