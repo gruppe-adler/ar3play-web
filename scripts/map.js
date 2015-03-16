@@ -10,6 +10,7 @@
     var
         tileSize = 256,
         currentMap,
+        getIcon,
         markers = {},
         getWorld = (function () {
             var currentWorld,
@@ -177,35 +178,53 @@
         });
     }
 
-    function getIcon(val) {
+    getIcon = (function () {
         var
             mapSide = {
                 'ind': 'independent',
                 'civ': 'civilian'
             },
-            side,
-            sidePrefix,
             mapClasstype = {
                 'unknown': ''
             },
-            classtype,
-            classtypeUrlBit,
-            imageUrl;
+            mapVehicle = {
+                'none': 'man',
+                'unknown': 'vehicle'
+            };
 
-        side = (val.role && val.role.side) || 'civ';
-        sidePrefix = mapSide[side] || side;
+        return function (val) {
+            var
+                side,
+                sideUrlBit,
+                classtype,
+                classtypeUrlBit,
+                vehicle,
+                vehicleUrlBit,
+                imageUrl;
 
-        classtype = (val.role && val.role.classtype) || 'unknown';
-        classtypeUrlBit = mapClasstype[classtype] || classtype;
+            vehicle = (val.status && val.status.vehicle) || 'none';
+            vehicleUrlBit = mapVehicle[vehicle] || vehicle;
 
-        imageUrl = 'images/' + sidePrefix + '_iconman' + classtypeUrlBit + '_ca.png';
+            side = (val.role && val.role.side) || 'civ';
+            sideUrlBit = mapSide[side] || side;
 
-        return {
-            url: imageUrl,
-            scaledSize: new google.maps.Size(24, 24),
-            anchor: new google.maps.Point(12, 6)
+            classtype = (val.role && val.role.classtype) || 'unknown';
+
+            if (vehicleUrlBit) {
+                classtypeUrlBit = '';
+            } else {
+                classtypeUrlBit = typeof mapClasstype[classtype] === 'string' ? mapClasstype[classtype] : classtype;
+            }
+
+            imageUrl = 'images/' + sideUrlBit + '_icon' + vehicleUrlBit + classtypeUrlBit + '_ca.png';
+
+            return {
+                url: imageUrl,
+                scaledSize: new google.maps.Size(24, 24),
+                anchor: new google.maps.Point(12, 6)
+            };
         };
-    }
+    }());
 
     function markerAction(methodName) {
         _.each(markers, function (m) {
