@@ -1,4 +1,4 @@
-var dataUrl = 'http://' + (document.location.host || 'localhost') + ':12302';
+var dataUrl = localStorage.getItem('api-url') || 'http://' + (document.location.host || 'localhost') + ':12302';
 
 function getQuery() {
     var query = {};
@@ -118,4 +118,13 @@ $(function () {
     }).join('\n')).change(function () {
         document.location.href = document.location.href.split('?')[0] + '?world=' + this.value;
     })[0].value = world;
+
+
+
+    $('#select-api-url').find('select').change(function () {
+        localStorage.setItem('api-url', this.value);
+        document.location.reload();
+    })[0].value = dataUrl;
+
+
 });
