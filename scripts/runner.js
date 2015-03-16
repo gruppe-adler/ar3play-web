@@ -36,18 +36,18 @@
         $.get(url, function (data) {
 
             _.each(data, function (newData, name) {
-                var data = knownUnits[name] || newData;
+                var knownUnit = knownUnits[name] || newData;
                 if (newData.position) {
-                    data.position = newData.position;
+                    knownUnit.position = newData.position;
                 }
                 if (newData.role) {
-                    data.role = newData.role;
+                    knownUnit.role = newData.role;
                 }
                 if (newData.status) {
-                    data.status = newData.status;
+                    knownUnit.status = newData.status;
                 }
 
-                knownUnits[name] = data;
+                knownUnits[name] = knownUnit;
             });
 
             map.updateMap(knownUnits);

@@ -210,7 +210,7 @@
 
             classtype = (val.role && val.role.classtype) || 'unknown';
 
-            if (vehicleUrlBit) {
+            if (vehicleUrlBit && vehicleUrlBit !== 'man') {
                 classtypeUrlBit = '';
             } else {
                 classtypeUrlBit = typeof mapClasstype[classtype] === 'string' ? mapClasstype[classtype] : classtype;
