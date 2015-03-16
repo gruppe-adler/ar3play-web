@@ -1,4 +1,7 @@
-var dataUrl = localStorage.getItem('api-url') || 'http://' + (document.location.host || 'localhost') + ':12302';
+if (!window.dataSources) {
+    alert('missing config.js with dataSources definition!');
+}
+var dataUrl = localStorage.getItem('api-url') || _.map(dataSources)[0] || 'http://' + (document.location.host || 'localhost') + ':12302';
 
 function getQuery() {
     var query = {};
@@ -121,7 +124,9 @@ $(function () {
 
 
 
-    $('#select-api-url').find('select').change(function () {
+    $('#select-api-url').find('select').html(_.map(dataSources, function (val, name) {
+        return '<option value="' + val + '">' + name + '</option>';
+    }).join('\n')).change(function () {
         localStorage.setItem('api-url', this.value);
         document.location.reload();
     })[0].value = dataUrl;

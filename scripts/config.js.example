@@ -1,0 +1,3 @@
+var dataSources = {
+    'example server' : 'http://example.com:12302'
+};
