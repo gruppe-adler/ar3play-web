@@ -89,6 +89,11 @@
         return getWorld().coordToMeters(latLng);
     }
 
+    function calculateDistance(x, y) {
+        // I know I cant do this on a globe, but we're roughly on a plane here and close to the equator :)
+        return Math.sqrt(x * x + y * y);
+    }
+
     var moveMarkerSmoothlyInOneSecond = (function () {
         var
             currentlyMovingMarkers = [],
@@ -105,27 +110,33 @@
 
             var
                 targetTime = 1000,
-                steps = 10,
                 oldPos = marker.getPosition(),
                 oldLat = oldPos.lat(),
                 oldLng = oldPos.lng(),
-                latDiff = (targetPos.lat() - oldLat) / steps,
-                lngDiff = (targetPos.lng() - oldLng) / steps,
+                latDiff = (targetPos.lat() - oldLat),
+                lngDiff = (targetPos.lng() - oldLng),
+                dist = calculateDistance(latDiff, lngDiff),
+                // 0.002 deg lat/lng are about 10 meters here
+                // I want number of steps between 1 at 1m and 10 at 50m
+                steps = Math.max(1, Math.min(10, 1000 * dist + 0.8)),
+                //steps = Math.max(1, Math.min(10, dist / 0.02)),
+                latDiffPerStep = latDiff / steps,
+                lngDiffPerStep = lngDiff / steps,
                 cnt = 0,
                 intervalId;
+
 
             intervalId = setInterval(function () {
                 if (!currentlyMovingMarkers[intervalId]) {
                     return;
                 }
+                cnt += 1;
                 if (cnt >= steps) {
                     clearInterval(intervalId);
                     marker.setPosition(targetPos);
                     return;
                 }
-                cnt += 1;
-
-                marker.setPosition(new google.maps.LatLng(oldLat + cnt * latDiff, oldLng + cnt * lngDiff));
+                marker.setPosition(new google.maps.LatLng(oldLat + cnt * latDiffPerStep, oldLng + cnt * lngDiffPerStep));
 
             }, targetTime / steps);
 
@@ -133,6 +144,14 @@
             currentlyMovingMarkerTargets[intervalId] = targetPos;
         };
     }());
+
+    function setIconIfChanged(marker, newIcon) {
+        var oldIcon = marker.getIcon();
+        if (oldIcon && oldIcon.url === newIcon.url) {
+            return;
+        }
+        marker.setIcon(newIcon);
+    }
 
 
     function updateMap(data) {
@@ -146,18 +165,16 @@
             if (val.position) {
                 moveMarkerSmoothlyInOneSecond(m, gameCoordsToLatLng(val.position.x, val.position.y));
                 m.zIndex = 1000 + (val.position.z || 0);
+                //m.setPosition(gameCoordsToLatLng(val.position.x, val.position.y));
             }
-            //m.setPosition(gameCoordsToLatLng(val.position.x, val.position.y));
 
-            m.setIcon(getIcon(val));
+            setIconIfChanged(m, getIcon(val));
             m.infowindow = m.infowindow || new google.maps.InfoWindow({
                 content: '?'
             });
             m.infowindow.content = '<div>' + name + '</div>';
             markers[name] = m;
         });
-
-
     }
 
     function getIcon(val) {
@@ -168,19 +185,26 @@
             },
             side,
             sidePrefix,
+            mapClasstype = {
+                'unknown': ''
+            },
+            classtype,
+            classtypeUrlBit,
             imageUrl;
 
         side = (val.role && val.role.side) || 'civ';
         sidePrefix = mapSide[side] || side;
 
-        imageUrl = 'images/' + sidePrefix + '_iconman_ca.png';
+        classtype = (val.role && val.role.classtype) || 'unknown';
+        classtypeUrlBit = mapClasstype[classtype] || classtype;
+
+        imageUrl = 'images/' + sidePrefix + '_iconman' + classtypeUrlBit + '_ca.png';
 
         return {
             url: imageUrl,
-            scaledSize: new google.maps.Size(16, 16),
-            anchor: new google.maps.Point(8, 8)
+            scaledSize: new google.maps.Size(24, 24),
+            anchor: new google.maps.Point(12, 6)
         };
-
     }
 
     function markerAction(methodName) {
