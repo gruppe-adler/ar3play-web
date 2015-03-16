@@ -216,6 +216,12 @@
                 classtypeUrlBit = typeof mapClasstype[classtype] === 'string' ? mapClasstype[classtype] : classtype;
             }
 
+            if (val.status && val.status.condition === 'dead') {
+                sideUrlBit = 'dead';
+                vehicleUrlBit = '';
+                classtypeUrlBit = 'man';
+            }
+
             imageUrl = 'images/' + sideUrlBit + '_icon' + vehicleUrlBit + classtypeUrlBit + '_ca.png';
 
             return {
