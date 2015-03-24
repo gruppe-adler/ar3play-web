@@ -21,7 +21,7 @@ var worlds = {
     altis: {
         tileDir: 'AltisZL5',
         initialZoom: 7,
-        maxZoom: 12,
+        maxZoom: 14,
         center: [15000, 15000],
         metersToCoord: function (x, y) {
             return new google.maps.LatLng(y * 0.00018870 - 3.2900, x * 0.0001888 - 0.0059);
