@@ -60,7 +60,7 @@ var worlds = {
         maxZoom: 14,
         center: [6000, 6000],
         metersToCoord: function (x, y) {
-            return new google.maps.LatLng(y * 0.00018980 - 2.8114, x * 0.0001903);
+            return new google.maps.LatLng(y * 0.00019015 - 2.8114, x * 0.0001903);
         },
         coordToMeters: function (latLng) {
             return {
