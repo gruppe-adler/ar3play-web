@@ -76,6 +76,13 @@ $(function () {
         currentServerMission = currentMission;
 
         $.get(dataUrl + '/missions', function (data) {
+            data = data.filter(function (mission) {
+                if (mission) {
+                    return true;
+                }
+                window.console && console.log('empty mission data :(');
+                return false;
+            });
             $missionSelect.html('<option value="">---</option>\n' + data.map(function (mission) {
                 missions[mission.instanceId] = mission;
                 return '<option value="' + mission.instanceId + '" ' + (mission.worldname.toLowerCase() !== world ? 'disabled' : '')  + '>' +
