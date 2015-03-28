@@ -48,6 +48,9 @@ $(function () {
     function getMission(instanceId) {
         var mission = missions[instanceId];
         if (mission) {
+            if (mission.worldname.toLowerCase() !== world) {
+                return changeWorld(mission.worldname);
+            }
             if (mission.is_streamable || mission.endtime) {
                 currentPlayingInstanceId = instanceId;
                 runner.setMission(mission);
@@ -60,10 +63,19 @@ $(function () {
         } else {
             log(instanceId + ' nicht gefunden');
         }
+
     }
 
-    map.init(world);
 
+    try {
+        map.init(world);
+    } catch (e) {
+        window.console && console.error(e);
+    }
+
+    function changeWorld(world) {
+        document.location.href = document.location.href.split('?')[0] + '?world=' + world.toLowerCase();
+    }
 
     $('#toggle-names').click((function () {
         var isOpen = false;
@@ -86,7 +98,7 @@ $(function () {
             });
             $missionSelect.html('<option value="">---</option>\n' + data.map(function (mission) {
                 missions[mission.instanceId] = mission;
-                return '<option value="' + mission.instanceId + '" ' + (mission.worldname.toLowerCase() !== world ? 'disabled' : '')  + '>' +
+                return '<option value="' + mission.instanceId + '">' +
                     timeFormat(mission.starttime) + ' : ' + mission.name +
                     ' (' + mission.worldname + ')' +
                     (currentServerMission === mission ? ' LÄUFT' : '') +
@@ -132,7 +144,7 @@ $(function () {
     $('#world-select').html(_.map(worlds, function (world, key) {
         return '<option value="' + key + '">' + world.name + '</option>';
     }).join('\n')).change(function () {
-        document.location.href = document.location.href.split('?')[0] + '?world=' + this.value;
+        changeWorld(this.value);
     })[0].value = world;
 
 
