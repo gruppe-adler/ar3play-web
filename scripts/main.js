@@ -73,7 +73,7 @@ $(function () {
         };
     }()));
 
-    $.get(dataUrl + '/currentMission', function (currentMission) {
+    $.get(dataUrl + '/currentMission').done(function (currentMission) {
         currentServerMission = currentMission;
 
         $.get(dataUrl + '/missions', function (data) {
@@ -88,12 +88,14 @@ $(function () {
                 missions[mission.instanceId] = mission;
                 return '<option value="' + mission.instanceId + '" ' + (mission.worldname.toLowerCase() !== world ? 'disabled' : '')  + '>' +
                     timeFormat(mission.starttime) + ' : ' + mission.name +
-                        ' (' + mission.worldname + ')' +
+                    ' (' + mission.worldname + ')' +
                     (currentServerMission === mission ? ' LÄUFT' : '') +
                     '</option>';
             }).join('\n'))
         });
 
+    }).fail(function () {
+        console.log(arguments);
     });
 
     $missionSelect.change(function () {
@@ -145,22 +147,29 @@ $(function () {
     (function () {
         var
             $authenticationInput = $('#authentification'),
-            $logout = $('#logout');
+            auth = localStorage.getItem('adlertools-secret');
+
+        function updateControls() {
+            if (auth) {
+                $missionDelete.fadeIn();
+            } else {
+                $missionDelete.fadeOut();
+            }
+        }
 
         $authenticationInput.change(function () {
-            localStorage.setItem('adlertools-secret', this.value);
+            auth = this.value;
+            localStorage.setItem('adlertools-secret', auth);
+            updateControls();
         });
 
         $(document).ajaxSend(function (event, jqXhr) {
             jqXhr.setRequestHeader('Authentication', localStorage.getItem('adlertools-secret'));
         });
 
-        $authenticationInput.val(localStorage.getItem('adlertools-secret'));
-        if (!$authenticationInput.val()) {
-            $missionDelete.hide();
-        } else {
-            $missionDelete.show();
-        }
+        $authenticationInput.val(auth);
+        updateControls()
+
     }());
 
     $missionDelete.click(function () {
