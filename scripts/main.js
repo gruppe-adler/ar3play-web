@@ -20,7 +20,8 @@ function getQuery() {
 $(function () {
 
     var
-        world = getQuery().world || 'stratis',
+        query = getQuery(),
+        world = query.world || 'stratis',
         missions = {},
         dateFormatFunctions = {
             iso8601: function (date) {
@@ -35,7 +36,9 @@ $(function () {
         log = function (message) {
             $('#messages').html(message).fadeTo(1000, 0.1);
         },
-        currentServerMission = '';
+        $missionSelect = $('#mission-select'),
+        currentServerMission = '',
+        currentPlayingInstanceId = '';
 
     function timeFormat(ts) {
         return dateFormatFunctions[dateFormat](new Date(ts * 1000));
@@ -45,6 +48,7 @@ $(function () {
         var mission = missions[instanceId];
         if (mission) {
             if (mission.is_streamable || mission.endtime) {
+                currentPlayingInstanceId = instanceId;
                 runner.setMission(mission);
                 $('#playing-mission-starttime').text(timeFormat(mission.starttime));
                 $('#playing-mission-title').text(missions[instanceId].name);
@@ -71,7 +75,7 @@ $(function () {
         currentServerMission = currentMission;
 
         $.get(dataUrl + '/missions', function (data) {
-            $('#mission-select').html('<option value="">---</option>\n' + data.map(function (mission) {
+            $missionSelect.html('<option value="">---</option>\n' + data.map(function (mission) {
                 missions[mission.instanceId] = mission;
                 return '<option value="' + mission.instanceId + '" ' + (mission.worldname.toLowerCase() !== world ? 'disabled' : '')  + '>' +
                     timeFormat(mission.starttime) + ' : ' + mission.name +
@@ -83,7 +87,7 @@ $(function () {
 
     });
 
-    $('#mission-select').change(function () {
+    $missionSelect.change(function () {
         getMission(this.value);
     });
 
@@ -131,5 +135,20 @@ $(function () {
         document.location.reload();
     })[0].value = dataUrl;
 
+    (function () {
+        if (query.secret) {
+            $('#mission-delete').show().click(function () {
+                $.ajax(dataUrl + '/mission/' + currentPlayingInstanceId + '?secret=' + query.secret, {
+                    method: 'DELETE'
+                }).done(function () {
+                    $missionSelect.find('[value=""]').select();
+                    $missionSelect.find('[value="' + currentPlayingInstanceId + '"]').remove();
+                }).fail(function (jqXhr) {
+                    alert('failed to delete ' + currentPlayingInstanceId + ': ' + (jqXhr.responseText || jqXhr.statusText));
+                });
+            });
+        }
+
+    }())
 
 });

@@ -65,17 +65,25 @@
         if (!currentMission) {
             throw new Error('no mission selected');
         }
-        map.clearMap();
-        knownUnits = {};
+        clear();
         currentTime = currentMission.starttime;
         missionEnded = false;
+    }
 
+    function clear() {
+        map.clearMap();
+        knownUnits = {};
     }
 
     window.runner = {
+
         setMission: function (mission /*{name: string, starttime: number, endtime?: number}*/) {
             currentMission = mission;
-            restart();
+            if (mission) {
+                restart();
+            } else {
+                clear();
+            }
         },
         setSpeed: function (multiplicator) {
             if (multiplicator >= 1) {
