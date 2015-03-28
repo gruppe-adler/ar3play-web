@@ -37,6 +37,7 @@ $(function () {
             $('#messages').html(message).fadeTo(1000, 0.1);
         },
         $missionSelect = $('#mission-select'),
+        $missionDelete = $('#mission-delete'),
         currentServerMission = '',
         currentPlayingInstanceId = '';
 
@@ -142,19 +143,35 @@ $(function () {
     })[0].value = dataUrl;
 
     (function () {
-        if (query.secret) {
-            $('#mission-delete').show().click(function () {
-                $.ajax(dataUrl + '/mission/' + currentPlayingInstanceId + '?secret=' + query.secret, {
-                    method: 'DELETE'
-                }).done(function () {
-                    $missionSelect.find('[value=""]').select();
-                    $missionSelect.find('[value="' + currentPlayingInstanceId + '"]').remove();
-                }).fail(function (jqXhr) {
-                    alert('failed to delete ' + currentPlayingInstanceId + ': ' + (jqXhr.responseText || jqXhr.statusText));
-                });
-            });
-        }
+        var
+            $authenticationInput = $('#authentification'),
+            $logout = $('#logout');
 
-    }())
+        $authenticationInput.change(function () {
+            localStorage.setItem('adlertools-secret', this.value);
+        });
+
+        $(document).ajaxSend(function (event, jqXhr) {
+            jqXhr.setRequestHeader('Authentication', localStorage.getItem('adlertools-secret'));
+        });
+
+        $authenticationInput.val(localStorage.getItem('adlertools-secret'));
+        if (!$authenticationInput.val()) {
+            $missionDelete.hide();
+        } else {
+            $missionDelete.show();
+        }
+    }());
+
+    $missionDelete.click(function () {
+        $.ajax(dataUrl + '/mission/' + currentPlayingInstanceId, {
+            method: 'DELETE'
+        }).done(function () {
+            $missionSelect.find('[value=""]').select();
+            $missionSelect.find('[value="' + currentPlayingInstanceId + '"]').remove();
+        }).fail(function (jqXhr) {
+            alert('failed to delete ' + currentPlayingInstanceId + ': ' + (jqXhr.responseText || jqXhr.statusText));
+        });
+    });
 
 });
