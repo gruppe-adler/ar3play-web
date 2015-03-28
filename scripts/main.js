@@ -41,7 +41,7 @@ $(function () {
         currentPlayingInstanceId = '';
 
     function timeFormat(ts) {
-        return dateFormatFunctions[dateFormat](new Date(ts * 1000));
+        return typeof ts === 'number' ? dateFormatFunctions[dateFormat](new Date(ts * 1000)) : '';
     }
 
     function getMission(instanceId) {
@@ -52,6 +52,7 @@ $(function () {
                 runner.setMission(mission);
                 $('#playing-mission-starttime').text(timeFormat(mission.starttime));
                 $('#playing-mission-title').text(missions[instanceId].name);
+                $('#playing-mission-endtime').text(timeFormat(mission.endtime));
             } else {
                 log(instanceId + ' nicht streambar');
             }
@@ -103,9 +104,7 @@ $(function () {
     $('#mission-restart').click(runner.restart);
 
     runner.onTimechange(function (time) {
-        var date = new Date(time * 1000);
-
-        $time.text(date.toISOString());
+        $time.text(timeFormat(time));
     });
 
     runner.onMissionEnd(function () {
