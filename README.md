@@ -17,7 +17,7 @@ Arma3 mission replays.
 # Installation of this thing here
 
 * clone
-* put [T10's Stratis map](http://forums.bistudio.com/showthread.php?178671-Tiled-maps-Google-maps-compatible-%28WIP%29) and others under maptiles
+* put [10T's Stratis map](http://forums.bistudio.com/showthread.php?178671-Tiled-maps-Google-maps-compatible-%28WIP%29) and others under maptiles
 * copy scripts/config.js.example to scripts/config.js , edit and point at the REST interface of one **ar3play-server** instance
 * configuration for islands is in worlds.js, in case you want to adjust zoom levels and geo mapping
 * go to index.html (*webserver not necessary*)
