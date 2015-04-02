@@ -238,7 +238,7 @@
 
                 return {
                     path: paths[classtype] || paths.man,
-                    fillColor: colors[side],
+                    fillColor: (val.status && val.status.condition === 'dead') ? colors.dead : colors[side],
                     fillOpacity: val.status && val.status.condition === 'alive' ? 1 : 0.4,
                     scale: 0.5,
                     strokeColor: (val.status && val.status.condition === 'dead') ? colors.dead : colors[side],
