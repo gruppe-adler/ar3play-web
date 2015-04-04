@@ -1,117 +1,126 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>ar3play-web</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=false"></script>
-    <script type="text/javascript"
-            src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.2/underscore-min.js"></script>
-    <style>
-        #select-date-format {
-            float: right;
-        }
-        #map {
-            clear: both;
-            position: relative;
-            min-height: 400px;
-            min-width: 400px;
-            background-color: pink;
-        }
-
-        html, body, #map {
-            height: 100%;
-        }
-
-        #play-multiplicator:before {
-            content: '('
-        }
-
-        #play-multiplicator:after {
-            content: ')'
-        }
-
-        #mission-play-controls {
-            float: right;
-        }
-
-        #mission-delete {
-            display: none;
-        }
-    </style>
-    <script src="scripts/paths.js"></script>
-    <script src="scripts/config.js"></script>
-    <script src="scripts/worlds.js"></script>
-    <script src="scripts/main.js"></script>
-    <script src="scripts/runner.js"></script>
-    <script src="scripts/map.js"></script>
+  <title>ar3play-web</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div id="messages"></div>
-<label id="select-date-format">Datumsformat
-    <select>
-        <option value="iso8601">ISO8601</option>
-        <option value="locale">lokal</option>
-    </select>
-</label>
-<section id="mission-change-controls">
-    <label>
-        choose world
-        <select id="world-select">
+  <header class="top-bar">
+    <div class="container">
+      <button type="button" class="btn btn-default btn-xs pull-right" data-toggle="modal" data-target="#settings">
+        Settings
+      </button>
 
-        </select>
-    </label>
-    <label>
-        choose mission
-        <select id="mission-select">
-            <option value="current">current</option>
-        </select>
-    </label>
-    <button id="mission-delete">delete</button>
-</section>
-
-<h1 id="playing-mission-title">---</h1>
-
-<section>
-    <div id="mission-play-controls">
-
-        <div id="map-controls">
-            <button id="toggle-names">toggle names</button>
-        </div>
-        <button id="mission-restart">restart</button>
+      <section id="mission-change-controls" class="pull-left">
         <label>
-            Geschwindigkeit
+          Mission
+          <select id="mission-select">
+            <option value="current">current</option>
+          </select>
+        </label>
+        <button id="mission-delete">delete</button>
+      </section>
+    </div>
+  </header>
+
+  <header class="title-bar">
+    <div class="container">
+      <div id="messages" class="pull-right"></div>
+      <h1 id="playing-mission-title" class="pull-left">---</h1>
+    </div>
+  </header>
+
+  <section id="map">
+    <div id="nojs">
+      If you can see this message, you have a problem.
+    </div>
+  </section>
+
+
+  <footer class="footer">
+    <div class="container">
+      <section>
+        <div id="mission-play-controls" class="pull-right">
+          <button class="btn btn-default" id="mission-restart">Restart</button>
+          <label>
+            Speed
             <input id="mission-play-speed" type="range" min="0" max="21" value="1" step="0.5"/>
             <span id="play-multiplicator">1</span>
-        </label>
-    </div>
-    <table>
-        <tr>
-            <th>Startzeit</th>
+          </label>
+        </div>
+        <table class="pull-left">
+          <tr>
+            <th>Start</th>
             <td><span id="playing-mission-starttime"></span></td>
-        </tr>
-        <tr>
-            <th>Aktuelle Zeit</th>
+          </tr>
+          <tr>
+            <th>Current</th>
             <td><span id="time"></span></td>
-        </tr>
-        <tr>
-            <th>Endzeit</th>
+          </tr>
+          <tr>
+            <th>End</th>
             <td><span id="playing-mission-endtime"></span></td>
-        </tr>
-    </table>
+          </tr>
+        </table>
 
-</section>
-<section id="map">
-    <div id="nojs">
-        If you can see this message, you have a problem.
+      </section>
     </div>
-</section>
-<label id="select-api-url">
-    API-URL
-    <select>
-    </select>
-</label>
-<label>authentification: <input id="authentification" type="text" name="secret" value=""/></label>
+  </footer>
+
+  <div class="modal fade" id="settings">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Settings</h4>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label for="select-api-url">API-URL</label>
+              <select id="select-api-url" class="form-control"></select>
+            </div>
+
+            <div class="form-group">
+              <label for="authentification">Authentication</label>
+              <input class="form-control" id="authentification" type="text" name="secret" value=""/>
+            </div>
+
+            <div class="form-group">
+              <label for="select-date-format">Date format</label>
+              <select class="form-control" id="select-date-format">
+                <option value="iso8601">ISO8601</option>
+                <option value="locale">Locale</option>
+              </select>
+            </div>
+
+
+          <div id="map-controls">
+            <button class="btn btn-default" id="toggle-names">toggle names</button>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=false"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.2/underscore-min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+  <script src="scripts/paths.js"></script>
+  <script src="scripts/config.js"></script>
+  <script src="scripts/worlds.js"></script>
+  <script src="scripts/main.js"></script>
+  <script src="scripts/runner.js"></script>
+  <script src="scripts/map.js"></script>
+
 </body>
 </html>
