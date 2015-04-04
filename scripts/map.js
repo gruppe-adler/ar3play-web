@@ -188,7 +188,8 @@
                 ind: '#008001',
                 civ: '#660080',
                 empty: '#808000',
-                dead: '#333333'
+                dead: '#333333',
+                enemy: '#ff2200'
             };
 
         return function (val) {
