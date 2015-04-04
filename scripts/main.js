@@ -75,6 +75,7 @@ $(function () {
 
     function changeWorld(world) {
         document.location.href = document.location.href.split('?')[0] + '?world=' + world.toLowerCase();
+        $('#world-select').text(world);
     }
 
     $('#toggle-names').click((function () {
@@ -136,20 +137,12 @@ $(function () {
         $time.text($time.text() + ' ENDE');
     });
 
-    $('#select-date-format').find('select').change(function () {
+    $('#select-date-format').change(function () {
         localStorage.setItem('date-format', this.value);
         dateFormat = this.value;
     })[0].value = dateFormat;
 
-    $('#world-select').html(_.map(worlds, function (world, key) {
-        return '<option value="' + key + '">' + world.name + '</option>';
-    }).join('\n')).change(function () {
-        changeWorld(this.value);
-    })[0].value = world;
-
-
-
-    $('#select-api-url').find('select').html(_.map(dataSources, function (val, name) {
+    $('#select-api-url').html(_.map(dataSources, function (val, name) {
         return '<option value="' + val + '">' + name + '</option>';
     }).join('\n')).change(function () {
         localStorage.setItem('api-url', this.value);
