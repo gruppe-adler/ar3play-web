@@ -149,25 +149,22 @@
     function setIconIfChanged(marker, newIcon) {
         var oldIcon = marker.getIcon();
 
-        if (oldIcon && oldIcon.url && oldIcon.url === newIcon.url) { // for unchanged rastered icons
-            return;
-        }
         // dont check for changes on svg icons - yet
         marker.setIcon(newIcon);
     }
 
 
     function updateMap(data) {
-        _.each(data, function (val, name) {
-            var m = markers[name] || new google.maps.Marker({
+        _.each(data, function (val, id) {
+            var m = markers[id] || new google.maps.Marker({
                     position: { lat: 0, lng: 0 },
                     map: currentMap,
-                    title: name
+                    title: id
                 });
 
             if (val.position) {
-                moveMarkerSmoothlyInTwoSeconds(m, gameCoordsToLatLng(val.position.x, val.position.y));
-                m.zIndex = 1000 + (val.position.z || 0);
+                moveMarkerSmoothlyInTwoSeconds(m, gameCoordsToLatLng(val.position[0], val.position[1]));
+                m.zIndex = 1000 + (val.position[2] || 0);
                 //m.setPosition(gameCoordsToLatLng(val.position.x, val.position.y));
             }
 
@@ -175,21 +172,23 @@
             m.infowindow = m.infowindow || new google.maps.InfoWindow({
                 content: '?'
             });
-            m.infowindow.content = '<div>' + name + '</div>';
-            markers[name] = m;
+            m.infowindow.content = '<div>' + id + '</div>';
+            markers[id] = m;
         });
     }
 
     getIcon = (function () {
         var
             colors = {
-                blufor: '#004c9a',
-                opfor: '#800000',
-                ind: '#008001',
-                civ: '#660080',
-                empty: '#808000',
+                WEST: '#004c9a',
+                EAST: '#800000',
+                GUER: '#008001',
+                CIV: '#660080',
+                EMPTY: '#808000',
                 dead: '#333333',
-                enemy: '#ff2200'
+                ENEMY: '#ff2200',
+                AMBIENT_LIFE: '#000000',
+                UNKNOWN: '#ffff00'
             };
 
         return function (val) {
@@ -201,29 +200,29 @@
                 dir,
                 path;
 
-            dir = (val.position && val.position.dir) || 0;
+            dir = val.direction || 0;
 
-            vehicle = val.status && val.status.vehicle !== 'none' && val.status.vehicle;
+            vehicle = val.container;
             if (vehicle) {
-                if (paths.vehicles[vehicle]) {
-                    path = paths.vehicles[vehicle];
-                } else {
-                    path = paths.vehicles.unknown;
-                    dir = 0;
-                }
+                path = ''
             } else {
-                path = paths.men[(val.role && val.role.classtype)] || paths.men.virtual;
+                if (paths[val.icon]) {
+                    path = paths[val.icon]
+                } else {
+                    path = paths.unknown;
+                    console.log('FIXME unknown icon: ' + val.icon);
+                }
             }
 
-            side = (val.role && val.role.side) || 'civ';
-            color = val.status && val.status.condition === 'dead' ? colors.dead : colors[side];
-            opacity = val.status && val.status.condition === 'alive' ? 1 : 0.4;
+            side = val.side || 'CIV';
+            color = val.health === 'dead' ? colors.dead : colors[side];
+            opacity = val.health === 'alive' ? 1 : 0.4;
 
             return {
                 path: path,
                 fillColor: color,
                 fillOpacity: opacity,
-                scale: 0.5,
+                scale: val.container ? 0 : 0.5,
                 strokeColor: color,
                 rotation: dir
             };

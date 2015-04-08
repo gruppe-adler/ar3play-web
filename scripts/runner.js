@@ -35,19 +35,14 @@
 
         $.get(url, function (data) {
 
-            _.each(data, function (newData, name) {
-                var knownUnit = knownUnits[name] || newData;
-                if (newData.position) {
-                    knownUnit.position = newData.position;
-                }
-                if (newData.role) {
-                    knownUnit.role = newData.role;
-                }
-                if (newData.status) {
-                    knownUnit.status = newData.status;
-                }
+            _.each(data, function (newData, id) {
+                knownUnits[id] = knownUnits[id] || newData;
 
-                knownUnits[name] = knownUnit;
+                Object.keys(newData).forEach(function (key) {
+                    if (newData[key] !== null) {
+                        knownUnits[id][key] = newData[key];
+                    }
+                });
             });
 
             map.updateMap(knownUnits);
