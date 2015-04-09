@@ -8,7 +8,7 @@ Arma3 mission replays.
 
 # Parts of the whole
 
-* [Server](https://github.com/gruppe-adler/ar3play-server) 
+* [Server](https://github.com/gruppe-adler/ar3play-server) >= 2.0.0
 * Arma3-Server
 	* [example mission](https://github.com/gruppe-adler/ar3play-examplemission.stratis) **OR**
 	* [Arma Serveraddon](https://github.com/gruppe-adler/ar3play-addon)
