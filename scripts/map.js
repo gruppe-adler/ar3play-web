@@ -206,12 +206,7 @@
             if (vehicle) {
                 path = ''
             } else {
-                if (paths[val.icon]) {
-                    path = paths[val.icon]
-                } else {
-                    path = paths.unknown;
-                    console.log('FIXME unknown icon: ' + val.icon);
-                }
+				path = iconToPath(val.icon);
             }
 
             side = val.side || 'CIV';
