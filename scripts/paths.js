@@ -33,10 +33,8 @@ _.extend(paths, {
     iconManMedic: paths.medic,
     iconManMG: paths.mg,
     iconManExplosive: paths.explosive,
-    "\\A3\\Soft_F_Gamma\\Offroad_01\\Data\\UI\\map_offroad_armed_CA.paa": paths.car_armed,
-    "\\A3\\soft_f\\MRAP_02\\Data\\UI\\map_MRAP_02_CA.paa": paths.car_armed,
-    "\\A3\\Air_F_Beta\\Heli_Attack_01\\Data\\UI\\Map_Heli_Attack_01_CA.paa": paths.helicopter_armed
-
+    iconStaticMG: paths.virtual,
+    "\\A3\\Soft_F_Gamma\\Offroad_01\\Data\\UI\\map_offroad_armed_CA.paa": paths.car_armed
 });
 
 var iconToPath = function (icon) {
