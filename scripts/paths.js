@@ -35,28 +35,56 @@ _.extend(paths, {
     iconManExplosive: paths.explosive,
     "\\A3\\Soft_F_Gamma\\Offroad_01\\Data\\UI\\map_offroad_armed_CA.paa": paths.car_armed,
     "\\A3\\soft_f\\MRAP_02\\Data\\UI\\map_MRAP_02_CA.paa": paths.car_armed,
-	"\\A3\\Air_F_Beta\\Heli_Attack_01\\Data\\UI\\Map_Heli_Attack_01_CA.paa": paths.helicopter_armed
+    "\\A3\\Air_F_Beta\\Heli_Attack_01\\Data\\UI\\Map_Heli_Attack_01_CA.paa": paths.helicopter_armed
 
 });
 
 var iconToPath = function (icon) {
-	var path = paths[icon];
+    var path = paths[icon];
 
-	if (path) {
-		return path;
-	}
+    if (path) {
+        return path;
+    }
 
-	icon = icon.toLowerCase();
-	if (icon.indexOf('heli') !== -1) {
-		return paths.helicopter;
-	}
-	if (icon.indexOf('\\truck') !== -1) {
-		return paths.truck;
-	}
-	if (icon.indexOf('_van_') !== -1) {
-		return paths.car;
-	}
+    icon = icon.toLowerCase();
+    if (icon.indexOf('\\heli_transport_') !== -1) {
+        return paths.helicopter;
+    }
+    if (icon.indexOf('\\heli_light_') !== -1) {
+        return paths.helicopter;
+    }
+    if (icon.indexOf('\\heli_attack') !== -1) {
+        return paths.helicopter_armed;
+    }
+    if (icon.indexOf('\\truck_') !== -1) {
+        return paths.truck;
+    }
+    if (icon.indexOf('\\plane_cas_') !== -1) {
+        return paths.plane_armed;
+    }
+    if (icon.indexOf('\\plane') !== -1) {
+        return paths.plane;
+    }
+    if (icon.indexOf('_van_') !== -1) {
+        return paths.car;
+    }
 
-	console.log('FIXME unknown icon: ' + icon);
-	return paths.unknown;
+    if (icon.indexOf('\\mrap_') !== -1) {
+        return paths.car_armed;
+    }
+
+    if (icon.indexOf('\\apc_') !== -1) {
+        return paths.apc;
+    }
+
+    if (icon.indexOf('\\mbt_') !== -1) {
+        return paths.tank;
+    }
+
+    if (icon === 'iconobject_1x1') {
+        return '';
+    }
+
+    console.log('FIXME unknown icon: ' + icon);
+    return paths.unknown;
 };
