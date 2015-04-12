@@ -32,6 +32,7 @@ _.extend(paths, {
     iconManLeader: paths.leader,
     iconManMedic: paths.medic,
     iconManMG: paths.mg,
+    iconManEngineer: paths.engineer,
     iconManExplosive: paths.explosive,
     iconStaticMG: paths.virtual,
     "\\A3\\Soft_F_Gamma\\Offroad_01\\Data\\UI\\map_offroad_armed_CA.paa": paths.car_armed
