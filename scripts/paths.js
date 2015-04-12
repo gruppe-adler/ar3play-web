@@ -89,7 +89,7 @@ var iconToPath = function (icon) {
     }
 
     if (icon.indexOf('\\quadbike_') !== -1) {
-        return paths.motorcycle;
+        return paths.quad;
     }
 
     if (icon.indexOf('_mortar_') !== -1 || icon === 'iconstaticmg') {
