@@ -60,7 +60,13 @@ var iconToPath = function (icon) {
     if (icon.indexOf('\\plane_cas_') !== -1) {
         return paths.plane_armed;
     }
+    if (icon.indexOf('\\plane_fighter_') !== -1) {
+        return paths.plane_armed;
+    }
     if (icon.indexOf('\\plane') !== -1) {
+        return paths.plane;
+    }
+    if (icon.indexOf('\\drones') !== -1) {
         return paths.plane;
     }
     if (icon.indexOf('_van_') !== -1) {
@@ -77,6 +83,17 @@ var iconToPath = function (icon) {
 
     if (icon.indexOf('\\mbt_') !== -1) {
         return paths.tank;
+    }
+    if (icon.indexOf('\\boat_') !== -1) {
+        return paths.ship;
+    }
+
+    if (icon.indexOf('\\quadbike_') !== -1) {
+        return paths.motorcycle;
+    }
+
+    if (icon.indexOf('_mortar_') !== -1 || icon === 'iconstaticmg') {
+        return paths.virtual; // for lack of a fitting icon
     }
 
     if (icon === 'iconobject_1x1') {
