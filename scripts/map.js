@@ -159,12 +159,12 @@
             var m = markers[id] || new google.maps.Marker({
                     position: { lat: 0, lng: 0 },
                     map: currentMap,
-                    title: id
+                    title: '' + (val.name || val.id)
                 });
 
             if (val.position) {
                 moveMarkerSmoothlyInTwoSeconds(m, gameCoordsToLatLng(val.position[0], val.position[1]));
-                m.zIndex = 1000 + (val.position[2] || 0);
+                //m.zIndex = 1000 + (val.position[2] || 0);
                 //m.setPosition(gameCoordsToLatLng(val.position.x, val.position.y));
             }
 
@@ -206,7 +206,7 @@
             if (vehicle) {
                 path = ''
             } else {
-				path = iconToPath(val.icon);
+                path = iconToPath(val.icon);
             }
 
             side = val.side || 'CIV';
