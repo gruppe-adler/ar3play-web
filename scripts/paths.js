@@ -73,6 +73,9 @@ var iconToPath = function (icon) {
     if (icon.indexOf('_van_') !== -1) {
         return paths.car;
     }
+    if (icon.indexOf('\\offroad_') !== -1) {
+        return paths.car;
+    }
 
     if (icon.indexOf('\\mrap_') !== -1) {
         return paths.car_armed;
