@@ -15,8 +15,12 @@
         getWorld = (function () {
             var currentWorld,
                 fn = function () {
-                return worlds[currentWorld];
-            };
+                    return worlds[currentWorld] || {
+                            minZoom: 7,
+                            maxZoom: 14
+                        };
+                };
+
             fn.setWorld = function (world) {
                 currentWorld = world;
             };

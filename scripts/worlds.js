@@ -70,5 +70,29 @@ var worlds = {
             };
         },
         name: 'Takistan'
+    },
+
+    // dummy data
+    fata: {
+        center: [5000, 5000],
+        metersToCoord: function (x, y) {
+            return new google.maps.LatLng(y * 0.00009435 - 2.8114, x * 0.00009432);
+        },
+        tileDir: 'dummy',
+        initialZoom: 7,
+        minZoom: 7,
+        maxZoom: 14,
+        name: 'PR FATA (dummy)'
+    },
+    kunduz: {
+        center: [2000, 2000],
+        metersToCoord: function (x, y) {
+            return new google.maps.LatLng(y * 0.00009435 - 2.8114, x * 0.00009432);
+        },
+        tileDir: 'dummy',
+        initialZoom: 7,
+        minZoom: 7,
+        maxZoom: 14,
+        name: 'PR Kunduz (dummy)'
     }
 };
