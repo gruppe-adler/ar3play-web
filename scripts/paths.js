@@ -96,6 +96,10 @@ var iconToPath = function (icon) {
         return paths.quad;
     }
 
+    if (icon.indexOf('_dingo') !== -1) {
+        return paths.car_armed;
+    }
+
     if (icon.indexOf('_mortar_') !== -1 || icon === 'iconstaticmg') {
         return paths.virtual; // for lack of a fitting icon
     }
