@@ -49,6 +49,10 @@ $(function () {
         JSON.parse(localStorage.getItem('show-names') || "false") ? map.showMarkers() : map.hideMarkers();
     }
 
+    function setIsMarkersAnimated() {
+        map.setIsMarkersAnimated(JSON.parse(localStorage.getItem('animate-markers') || "false"));
+    }
+
     function getMission(instanceId) {
         var mission = missions[instanceId];
         if (mission) {
@@ -59,6 +63,7 @@ $(function () {
                 currentPlayingInstanceId = instanceId;
                 runner.setMission(mission);
                 showOrHideInfoboxes();
+                setIsMarkersAnimated();
                 $('#playing-mission-starttime').text(timeFormat(mission.starttime));
                 $('#playing-mission-title').text(missions[instanceId].name);
                 $('#playing-mission-endtime').text(timeFormat(mission.endtime));
@@ -87,6 +92,11 @@ $(function () {
         localStorage.setItem('show-names', JSON.stringify(this.checked));
         showOrHideInfoboxes();
     })[0].checked = JSON.parse(localStorage.getItem('show-names') || "false");
+
+    $('#animate-markers').click(function () {
+        localStorage.setItem('animate-markers', JSON.stringify(this.checked));
+        setIsMarkersAnimated();
+    })[0].checked = JSON.parse(localStorage.getItem('animate-markers') || "false");
 
     $.get(dataUrl + '/currentMission').done(function (currentMission) {
         currentServerMission = currentMission;

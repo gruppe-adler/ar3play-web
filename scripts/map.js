@@ -13,6 +13,7 @@
         getIcon,
         markers = {},
         showInfoBoxes = false,
+        isMarkersAnimated = false,
         getWorld = (function () {
             var currentWorld,
                 fn = function () {
@@ -168,9 +169,11 @@
                 });
 
             if (val.position) {
-                moveMarkerSmoothlyInTwoSeconds(m, gameCoordsToLatLng(val.position[0], val.position[1]));
-                //m.zIndex = 1000 + (val.position[2] || 0);
-                //m.setPosition(gameCoordsToLatLng(val.position.x, val.position.y));
+                if (isMarkersAnimated) {
+                    moveMarkerSmoothlyInTwoSeconds(m, gameCoordsToLatLng(val.position[0], val.position[1]));
+                } else {
+                    m.setPosition(gameCoordsToLatLng(val.position[0], val.position[1]));
+                }
             }
 
             setIconIfChanged(m, getIcon(val));
@@ -250,6 +253,9 @@
         init: init,
         updateMap: updateMap,
         clearMap: clearMap,
+        setIsMarkersAnimated: function (val) {
+            isMarkersAnimated = val;
+        },
         showMarkers: function () {
             showInfoBoxes = true;
             infoBoxAction('open');
