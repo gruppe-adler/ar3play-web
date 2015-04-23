@@ -45,6 +45,10 @@ $(function () {
         return typeof ts === 'number' ? dateFormatFunctions[dateFormat](new Date(ts * 1000)) : '';
     }
 
+    function showOrHideInfoboxes() {
+        JSON.parse(localStorage.getItem('show-names') || "false") ? map.showMarkers() : map.hideMarkers();
+    }
+
     function getMission(instanceId) {
         var mission = missions[instanceId];
         if (mission) {
@@ -54,6 +58,7 @@ $(function () {
             if (mission.is_streamable || mission.endtime) {
                 currentPlayingInstanceId = instanceId;
                 runner.setMission(mission);
+                showOrHideInfoboxes();
                 $('#playing-mission-starttime').text(timeFormat(mission.starttime));
                 $('#playing-mission-title').text(missions[instanceId].name);
                 $('#playing-mission-endtime').text(timeFormat(mission.endtime));
@@ -79,8 +84,9 @@ $(function () {
     }
 
     $('#show-names').click(function () {
-        this.checked ? map.showMarkers() : map.hideMarkers();
-    });
+        localStorage.setItem('show-names', JSON.stringify(this.checked));
+        showOrHideInfoboxes();
+    })[0].checked = JSON.parse(localStorage.getItem('show-names') || "false");
 
     $.get(dataUrl + '/currentMission').done(function (currentMission) {
         currentServerMission = currentMission;

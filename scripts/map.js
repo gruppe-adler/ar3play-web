@@ -12,6 +12,7 @@
         currentMap,
         getIcon,
         markers = {},
+        showInfoBoxes = false,
         getWorld = (function () {
             var currentWorld,
                 fn = function () {
@@ -173,10 +174,15 @@
             }
 
             setIconIfChanged(m, getIcon(val));
-            m.infowindow = m.infowindow || new google.maps.InfoWindow({
-                content: '?'
-            });
-            m.infowindow.content = '<div>' + id + '</div>';
+            if (!m.infowindow) {
+                m.infowindow = new google.maps.InfoWindow({
+                    content: '?'
+                });
+                m.infowindow.content = '<div>' + (val.name || '') + ' (' + id + ')</div>';
+                if (showInfoBoxes) {
+                    m.infowindow.open(currentMap, m);
+                }
+            }
             markers[id] = m;
         });
     }
@@ -228,7 +234,7 @@
         };
     }());
 
-    function markerAction(methodName) {
+    function infoBoxAction(methodName) {
         _.each(markers, function (m) {
             m.infowindow[methodName](currentMap, m);
         });
@@ -244,8 +250,14 @@
         init: init,
         updateMap: updateMap,
         clearMap: clearMap,
-        showMarkers: function () {markerAction('open'); },
-        hideMarkers: function () {markerAction('close'); },
+        showMarkers: function () {
+            showInfoBoxes = true;
+            infoBoxAction('open');
+        },
+        hideMarkers: function () {
+            showInfoBoxes = false;
+            infoBoxAction('close');
+        },
         _getMap: function () {
             return currentMap;
         }
