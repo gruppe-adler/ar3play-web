@@ -78,13 +78,9 @@ $(function () {
         $('#world-select').text(world);
     }
 
-    $('#toggle-names').click((function () {
-        var isOpen = false;
-        return function () {
-            map[isOpen ? 'hideMarkers' : 'showMarkers']();
-            isOpen = !isOpen;
-        };
-    }()));
+    $('#show-names').click(function () {
+        this.checked ? map.showMarkers() : map.hideMarkers();
+    });
 
     $.get(dataUrl + '/currentMission').done(function (currentMission) {
         currentServerMission = currentMission;
