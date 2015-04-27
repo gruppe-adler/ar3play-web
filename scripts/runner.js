@@ -39,7 +39,7 @@
                 knownUnits[id] = knownUnits[id] || newData;
 
                 Object.keys(newData).forEach(function (key) {
-                    if (newData[key] !== null) {
+                    if (newData[key] !== null && newData[key] !== undefined) {
                         knownUnits[id][key] = newData[key];
                     }
                 });

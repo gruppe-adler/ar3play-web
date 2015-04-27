@@ -45,6 +45,10 @@ var iconToPath = function (icon) {
         return path;
     }
 
+    if (!icon) {
+        return paths.unknown;
+    }
+
     icon = icon.toLowerCase();
     if (icon.indexOf('\\heli_transport_') !== -1) {
         return paths.helicopter;
