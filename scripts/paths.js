@@ -74,7 +74,7 @@ var iconToPath = function (icon) {
     if (icon.indexOf('\\drones') !== -1) {
         return paths.plane;
     }
-    if ((icon.indexOf('_van_') !== -1) || (icon.indexOf('suv_') !== -1)) {
+    if ((icon.indexOf('_van_') !== -1) || (icon.indexOf('suv_') !== -1) || (icon.indexOf('\\hatchback_') !== -1)) {
         return paths.car;
     }
     if (icon.indexOf('\\offroad_') !== -1) {
