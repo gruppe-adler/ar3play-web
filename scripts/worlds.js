@@ -96,3 +96,5 @@ var worlds = {
         name: 'PR Kunduz (dummy)'
     }
 };
+
+worlds.chernarus_summer = worlds.chernarus;
