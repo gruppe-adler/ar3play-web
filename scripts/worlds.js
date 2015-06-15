@@ -98,3 +98,13 @@ var worlds = {
 };
 
 worlds.chernarus_summer = worlds.chernarus;
+worlds.woodland_acr = worlds.chernarus;
+worlds.woodland_acr.metersToCoord = (function () {
+	var fn = worlds.woodland_acr.metersToCoord; 
+	return function (x, y) {
+		x = x + 5430;
+		y = y + 800;
+		return fn(x, y);
+	};
+}());
+
