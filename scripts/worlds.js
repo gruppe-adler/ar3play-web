@@ -98,7 +98,7 @@ var worlds = {
 };
 
 worlds.chernarus_summer = worlds.chernarus;
-worlds.woodland_acr = worlds.chernarus;
+worlds.woodland_acr = Object.create(worlds.chernarus);
 worlds.woodland_acr.metersToCoord = (function () {
 	var fn = worlds.woodland_acr.metersToCoord; 
 	return function (x, y) {
