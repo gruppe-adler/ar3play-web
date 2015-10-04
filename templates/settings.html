@@ -1,0 +1,42 @@
+<div class="container">
+  <form>
+    <div class="form-group">
+      <label for="select-api-url">ar3play server</label>
+      <select id="select-api-url" class="form-control" ng-model="settings.api_url">
+        <option ng-repeat="option in settings.api_urls" value="{{option.value}}">{{option.name}}</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="authentication">Authentication</label>
+      <input class="form-control" id="authentication" type="text" name="secret" ng.value="settings.authentication" />
+    </div>
+
+    <div class="form-group">
+      <label for="select-date-format">Date format</label>
+      <select class="form-control" id="select-date-format" ng-model="settings.date_format">
+        <option value="iso8601">ISO8601</option>
+        <option value="locale">Locale</option>
+      </select>
+    </div>
+
+
+    <div id="form-group">
+      <label>Map Settings</label>
+      <div class="checkbox">
+        <label for="show-names">
+          <input type="checkbox" class="btn btn-default" id="show-names" ng-model="settings.show_names" />
+          Show Names
+        </label>
+      </div>
+      <div class="checkbox">
+        <label for="animate-markers">
+          <input type="checkbox" class="btn btn-default" id="animate-markers" ng-model="settings.animate_markers" />
+          Animate Markers
+        </label>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-default" ng-click="save()">Save</button>
+  </form>
+</div>
