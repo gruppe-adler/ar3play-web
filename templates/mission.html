@@ -1,0 +1,43 @@
+<header class="title-bar">
+  <div class="container">
+    <div id="messages" class="pull-right"></div>
+    <h1 id="playing-mission-title" class="pull-left">{{ mission.name }}</h1>
+  </div>
+</header>
+
+<section id="map">
+  <div id="nojs">
+    If you can see this message, you have a problem.
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <section>
+      <div id="mission-play-controls" class="pull-right">
+        <button class="btn btn-default" id="mission-restart" ng-click="restartRunner()">Restart</button>
+        <label>
+          Speed
+          <input type="range" min="0" max="21" value="1" step="0.5" ng-model="play_speed" ng-change="sliderChanged()" />
+          <span>{{ play_multiplicator }}</span>
+        </label>
+      </div>
+      <table class="pull-left">
+        <tr>
+          <th>Start</th>
+          <td>{{ mission.starttime * 1000 | date:'medium' }}</td>
+        </tr>
+        <tr>
+          <th>Current</th>
+          <td>{{ mission.time * 1000 | date:'medium' }}</td>
+        </tr>
+        <tr>
+          <th>End</th>
+          <td>{{ mission.endtime * 1000 | date:'medium' }}</td>
+        </tr>
+      </table>
+
+    </section>
+  </div>
+</footer>

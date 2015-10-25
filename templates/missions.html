@@ -1,0 +1,14 @@
+<div class="container">
+  <table class="table table-striped">
+    <tr>
+      <th>Mission</th>
+      <th>World</th>
+      <th>Date</th>
+    </tr>
+    <tr ng-repeat="mission in missions">
+      <td><a ng-href="#/missions/{{ mission.instanceId }}">{{mission.name}}</a></td>
+      <td>{{mission.worldname}}</td>
+      <td>{{mission.starttime * 1000 | date}}</td>
+    </tr>
+  </table>
+</div>
