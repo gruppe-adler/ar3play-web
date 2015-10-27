@@ -30,3 +30,7 @@ Nice things like requirejs, angular or similar will have to wait :P
 There shouldnt be any big gotchas. One hint: at the very bottom, beneath the map, there is 
 * the place to change the backend (ar3play-server) instance -> see config.js
 * an input field to enter a password for ar3play-server authentication. Needed for deleting replays! The password will be put into localstorage, so you'll have to enter it once only.
+
+# Screenshot
+
+![current screenshot](http://i.imgur.com/U5M8xDf.png)
