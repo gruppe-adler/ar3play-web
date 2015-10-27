@@ -26,92 +26,82 @@ var paths = {
 };
 
 _.extend(paths, {
-    iconManAT: paths.at,
-    iconMan: paths.man,
-    iconManOfficer: paths.officer,
-    iconManLeader: paths.leader,
-    iconManMedic: paths.medic,
-    iconManMG: paths.mg,
-    iconManEngineer: paths.engineer,
-    iconManExplosive: paths.explosive,
-    iconStaticMG: paths.virtual,
-    "\\A3\\Soft_F_Gamma\\Offroad_01\\Data\\UI\\map_offroad_armed_CA.paa": paths.car_armed
+    iconmanat: paths.at,
+    iconman: paths.man,
+    iconmanofficer: paths.officer,
+    iconmanleader: paths.leader,
+    iconmanmedic: paths.medic,
+    iconmanmg: paths.mg,
+    iconmanengineer: paths.engineer,
+    iconmanexplosive: paths.explosive,
+    iconstaticmg: paths.virtual
 });
 
+var vehicle_icon_map_vanilla = {
+    helicopter: ['\\heli_transport_', '\\heli_light_', ],
+    helicopter_armed: ['\\heli_attack'],
+    truck: ['\\truck_'],
+    plane_armed: ['\\plane_cas_', '\\plane_fighter_'],
+    plane: ['\\plane', '\\drones'],
+    car_armed: ['\\mrap_', '\\apc_', '\\dingo', '_dingo', 'offroad_armed'],
+    car: ['_van_', 'suv_', '\\hatchback_', '\\offroad_'],
+    tank: ['\\mbt_'],
+    ship: ['\\boat_'],
+    quad: ['\\quadbike_'],
+    virtual: ['_mortar_', 'iconstaticmg']
+
+};
+
+var vehicle_icon_map_rhs = {
+    truck: ['rhs_gaz66'],
+    car_armed: ['rhsusf_m113', 'btr60'],
+    car: ['ico_m998_2dr'],
+    virtual: ['rhs_heavyweapons'],
+    tank: ['rhs_bmp']
+};
+
+function getPathFromVehicleIconMap(iconMap, icon) {
+    var path;
+    _.each(iconMap, function (matchers, pathKey) {
+        if (matchers.some(function (matcher) {
+                if (typeof matcher === 'string') {
+                    return icon.indexOf(matcher) !== -1;
+                } else if (matcher.exec) {
+                    return matcher.exec(icon);
+                }
+                return false;
+            })) {
+            path = pathKey;
+        }
+    });
+
+    return paths[path];
+}
+
 var iconToPath = function (icon) {
-    var path = paths[icon];
-
-    if (path) {
-        return path;
-    }
-
+    var path;
     if (!icon) {
         return paths.unknown;
     }
-
     icon = icon.toLowerCase();
-    if (icon.indexOf('\\heli_transport_') !== -1) {
-        return paths.helicopter;
-    }
-    if (icon.indexOf('\\heli_light_') !== -1) {
-        return paths.helicopter;
-    }
-    if (icon.indexOf('\\heli_attack') !== -1) {
-        return paths.helicopter_armed;
-    }
-    if (icon.indexOf('\\truck_') !== -1) {
-        return paths.truck;
-    }
-    if (icon.indexOf('\\plane_cas_') !== -1) {
-        return paths.plane_armed;
-    }
-    if (icon.indexOf('\\plane_fighter_') !== -1) {
-        return paths.plane_armed;
-    }
-    if (icon.indexOf('\\plane') !== -1) {
-        return paths.plane;
-    }
-    if (icon.indexOf('\\drones') !== -1) {
-        return paths.plane;
-    }
-    if ((icon.indexOf('_van_') !== -1) || (icon.indexOf('suv_') !== -1) || (icon.indexOf('\\hatchback_') !== -1)) {
-        return paths.car;
-    }
-    if (icon.indexOf('\\offroad_') !== -1) {
-        return paths.car;
-    }
 
-    if (icon.indexOf('\\mrap_') !== -1) {
-        return paths.car_armed;
-    }
-
-    if (icon.indexOf('\\apc_') !== -1) {
-        return paths.apc;
-    }
-
-    if (icon.indexOf('\\mbt_') !== -1) {
-        return paths.tank;
-    }
-    if (icon.indexOf('\\boat_') !== -1) {
-        return paths.ship;
-    }
-
-    if (icon.indexOf('\\quadbike_') !== -1) {
-        return paths.quad;
-    }
-
-    if (icon.indexOf('_dingo') !== -1) {
-        return paths.car_armed;
-    }
-
-    if (icon.indexOf('_mortar_') !== -1 || icon === 'iconstaticmg') {
-        return paths.virtual; // for lack of a fitting icon
-    }
-
-    if (icon === 'iconobject_1x1') {
+    if (icon === 'iconobject_1x1' || icon === 'iconobject_circle') {
         return '';
     }
 
-    console.log('FIXME unknown icon: ' + icon);
-    return paths.unknown;
+    path = paths[icon];
+
+    if (!path) {
+        path = getPathFromVehicleIconMap(vehicle_icon_map_vanilla, icon);
+    }
+    if (!path) {
+        path = getPathFromVehicleIconMap(vehicle_icon_map_rhs, icon);
+    }
+
+    if (!path) {
+        console.log('FIXME unknown icon: ' + icon);
+        return paths.unknown;
+    }
+
+    return path;
 };
