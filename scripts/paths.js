@@ -57,7 +57,8 @@ var vehicle_icon_map_rhs = {
     car_armed: ['rhsusf_m113', 'btr60'],
     car: ['ico_m998_2dr'],
     virtual: ['rhs_heavyweapons'],
-    tank: ['rhs_bmp']
+    tank: ['rhs_bmp'],
+    helicopter: ['_uh60']
 };
 
 function getPathFromVehicleIconMap(iconMap, icon) {
