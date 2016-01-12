@@ -55,7 +55,7 @@ var vehicle_icon_map_vanilla = {
 var vehicle_icon_map_rhs = {
     truck: ['rhs_gaz66'],
     car_armed: ['rhsusf_m113', 'btr60'],
-    car: ['ico_m998_2dr'],
+    car: ['ico_m998_2dr', '_uaz_', '_m1025_m2'],
     virtual: ['rhs_heavyweapons'],
     tank: ['rhs_bmp'],
     helicopter: ['_uh60']
