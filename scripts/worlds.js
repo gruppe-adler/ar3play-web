@@ -71,6 +71,24 @@ var worlds = {
         },
         name: 'Takistan'
     },
+    
+    zargabad: {
+        tileDir: 'Zargabad_18022',
+        initialZoom: 7,
+        maxZoom: 14,
+        center: [6000, 6000],
+        metersToCoord: function (x, y) {
+            return new google.maps.LatLng(y * 0.00019015 - 2.8150, x * 0.0001903);
+        },
+        coordToMeters: function (latLng) {
+            return {
+                x: latLng.lat() / 0.0001903,
+                y: latLng.lng() + 2.8114 / 0.00018980,
+                z: 0
+            };
+        },
+        name: 'Zargabad'
+    },
 
     // dummy data
     fata: {
